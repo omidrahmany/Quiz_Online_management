@@ -13,4 +13,7 @@ public class Teacher extends Person {
     public Teacher(String firstName, String lastName, Account account) {
         super(firstName, lastName, account);
     }
+
+    public Teacher() {
+    }
 }

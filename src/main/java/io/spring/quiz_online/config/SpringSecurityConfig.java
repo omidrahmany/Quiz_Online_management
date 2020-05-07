@@ -22,7 +22,7 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-private UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
 
     @Autowired
     public SpringSecurityConfig(@Qualifier(value = "IUserDetailsService") UserDetailsService userDetailsService) {
@@ -40,7 +40,7 @@ private UserDetailsService userDetailsService;
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/registration", "/").permitAll()
+                .antMatchers("/registration").permitAll()
                 .antMatchers(HttpMethod.GET, "/assets/**").permitAll()
                 .antMatchers("/sign-up/**").permitAll()
                 .anyRequest().authenticated()
@@ -48,6 +48,7 @@ private UserDetailsService userDetailsService;
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()
+//                .defaultSuccessUrl("/home")
                 .and()
                 .httpBasic()
                 .and()
@@ -55,7 +56,6 @@ private UserDetailsService userDetailsService;
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
-
 
 
         ;

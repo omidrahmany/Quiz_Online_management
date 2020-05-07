@@ -26,7 +26,7 @@ public class IAccountService implements AccountService {
     @Override
     public void register(RegisteredUserInfo registeredUserInfo) {
 //        Optional<Account> account = accountRepository.findAccountByUsername(registeredUserInfo.getUsername());
-        Role role = roleRepository.findByRoleContains(RoleEnum.valueOf(registeredUserInfo.getRole()));
+        Role role = roleRepository.findByRole(RoleEnum.valueOf(registeredUserInfo.getRole()));
         Person person = null;
         if (role.getRole().equals(RoleEnum.STUDENT))
             person = new Student(registeredUserInfo.getFirstName(), registeredUserInfo.getLastName(), null);

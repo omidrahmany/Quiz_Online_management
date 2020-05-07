@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface RoleRepository extends JpaRepository<Role,Long> {
-    Role findByRoleContains(RoleEnum roleType);
+    Role findByRole(RoleEnum roleType);
 }

@@ -12,4 +12,7 @@ public class Student extends Person {
     public Student(String firstName, String lastName, Account account) {
         super(firstName, lastName, account);
     }
+
+    public Student() {
+    }
 }
