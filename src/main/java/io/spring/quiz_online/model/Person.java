@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "role")
+@DiscriminatorColumn(name = "role" , discriminatorType = DiscriminatorType.STRING)
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,4 +62,10 @@ public class Person {
     public void setAccount(Account account) {
         this.account = account;
     }
+
+
+
+
+    // test
+
 }

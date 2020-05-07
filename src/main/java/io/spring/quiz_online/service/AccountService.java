@@ -6,6 +6,7 @@ import io.spring.quiz_online.model.RegisteredUserInfo;
 import java.util.Optional;
 
 public interface AccountService {
+
     void register(RegisteredUserInfo registeredUserInfo);
     Optional<Account> findByUsername(String username);
 }

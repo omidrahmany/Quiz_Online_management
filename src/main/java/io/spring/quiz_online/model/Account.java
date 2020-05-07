@@ -97,10 +97,10 @@ public class Account {
 
     // Builder
 
-    public static AccountBuilder getAccountBuilder(){return new AccountBuilder();}
+    public static AccountBuilder getAccountBuilder(){return new AccountBuilder() ;}
 
 
-    public static class AccountBuilder {
+     public static class AccountBuilder {
         private String username;
         private String password;
         private String email;
