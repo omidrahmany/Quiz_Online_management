@@ -7,25 +7,27 @@ let password = document.querySelector("#password");
 let confirmedPassword = document.querySelector("#confirmed-password");
 let role = "";
 let form = document.querySelector("form");
-let url = "http://localhost:8585/sign-up";
+let url = "http://localhost:8081/sign-up";
 
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
-    if (document.querySelector("#STUDENT").checked) role = 'STUDENT';
-    else if (document.querySelector("#TEACHER").checked) role = 'TEACHER';
+    let option = document.querySelector("#role-options");
+    if (option.selectedIndex === 0) role = 'STUDENT';
+    else if (option.selectedIndex === 1) role = 'TEACHER';
 
     let user = {
         "firstName": firstName.value, "lastName": lastName.value
         , "email": email.value, "username": username.value
-        , "password": password.value, "role": role, "isEnable":false
+        , "password": password.value, "role": role, "isEnable": false
     };
     http.post(url, user);
     console.log(user);
-    firstName.value="";
-    lastName.value="";
-    username.value="";
-    password.value="";
-    confirmedPassword.value="";
-    email.value="";
+    firstName.value = "";
+    lastName.value = "";
+    username.value = "";
+    password.value = "";
+    confirmedPassword.value = "";
+    email.value = "";
+    option.selectedIndex = 0;
 });

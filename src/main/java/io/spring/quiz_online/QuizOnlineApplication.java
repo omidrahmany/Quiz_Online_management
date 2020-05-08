@@ -1,6 +1,6 @@
 package io.spring.quiz_online;
 
-import io.spring.quiz_online.service.RoleHandlingInDB;
+import io.spring.quiz_online.config.BasicSettingOnDB;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -11,8 +11,9 @@ public class QuizOnlineApplication {
     public static void main(String[] args) {
 
         ConfigurableApplicationContext run = SpringApplication.run(QuizOnlineApplication.class, args);
-        RoleHandlingInDB roleHandlingInDB = (RoleHandlingInDB) run.getBean("roleHandlingInDB");
-        roleHandlingInDB.createRolesInDB();
+        BasicSettingOnDB basicSettingOnDB = (BasicSettingOnDB) run.getBean("basicSettingOnDB");
+        basicSettingOnDB.insertRolesIntoDB().insertManagerAccountIntoDB();
+
 
     }
 

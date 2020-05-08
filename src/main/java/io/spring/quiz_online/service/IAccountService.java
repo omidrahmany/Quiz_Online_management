@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,6 +33,8 @@ public class IAccountService implements AccountService {
             person = new Student(registeredUserInfo.getFirstName(), registeredUserInfo.getLastName(), null);
         else if (role.getRole().equals(RoleEnum.TEACHER))
             person = new Teacher(registeredUserInfo.getFirstName(), registeredUserInfo.getLastName(), null);
+        else if (role.getRole().equals(RoleEnum.MANAGER))
+            person = new Manager(registeredUserInfo.getFirstName(), registeredUserInfo.getLastName(), null);
 
         Account account = Account.getAccountBuilder()
                 .setUsername(registeredUserInfo.getUsername())
@@ -40,8 +43,7 @@ public class IAccountService implements AccountService {
                 .setEnabled(registeredUserInfo.isEnable())
                 .setRole(role)
                 .setPerson(person)
-                .createAccount()
-                ;
+                .createAccount();
         accountRepository.save(account);
     }
 
@@ -49,4 +51,18 @@ public class IAccountService implements AccountService {
     public Optional<Account> findByUsername(String username) {
         return Optional.empty();
     }
+
+    @Override
+    public List<Account> findAccountsByRoleType(RoleEnum roleType) {
+        Role role = roleRepository.findByRole(roleType);
+        return accountRepository.findAccountsByRole(role);
+    }
+
+    @Override
+    public void deleteAccountsByRole(RoleEnum roleType) {
+        Role role = roleRepository.findByRole(roleType);
+        accountRepository.deleteAccountsByRole(role);
+    }
+
+
 }

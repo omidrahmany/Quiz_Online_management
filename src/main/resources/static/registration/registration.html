@@ -33,16 +33,20 @@
         </div>
 
         <div>
-            <lable for="role">نقش:</lable>
-            <input type="radio" name="role" value="STUDENT" id="STUDENT" s>دانشجو</input>
-            <input type="radio" name="role" value="TEACHER" id="TEACHER">استاد</input>
+            <lable for="role">نقش کاربری</lable>
+            <select id="role-options" name="role">
+                <option value="STUDENT"  selected>دانشجو</option>
+                <option value="TEACHER"  >استاد</option>
+            </select>
+            <!--<input type="radio" name="role" value="STUDENT" id="STUDENT" s>دانشجو</input>
+            <input type="radio" name="role" value="TEACHER" id="TEACHER">استاد</input>-->
         </div>
         <div>
-            <button type="submit"> ثبت نام کن</button>
+            <button type="submit"> ثبت نام اولیه</button>
         </div>
     </form>
     <div>
-         <a href="/login">ورود به سیستم</a>
+        <a href="/login">ورود به سیستم</a>
     </div>
 
 </div>
