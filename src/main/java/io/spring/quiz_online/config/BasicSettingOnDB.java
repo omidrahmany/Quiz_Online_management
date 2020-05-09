@@ -1,6 +1,7 @@
 package io.spring.quiz_online.config;
 
 
+import io.spring.quiz_online.excetion_handling.InvalidAccountException;
 import io.spring.quiz_online.model.*;
 import io.spring.quiz_online.repositories.RoleRepository;
 import io.spring.quiz_online.service.AccountService;
@@ -33,7 +34,7 @@ public class BasicSettingOnDB {
         return this;
     }
 
-    public BasicSettingOnDB insertManagerAccountIntoDB() {
+    public BasicSettingOnDB insertManagerAccountIntoDB() throws InvalidAccountException {
         if (accountService.findAccountsByRoleType(RoleEnum.MANAGER).size() != 1) {
             accountService.deleteAccountsByRole(RoleEnum.MANAGER);
             RegisteredUserInfo managerInfo = RegisteredUserInfo.getRegisteredUserInfoBuilder()

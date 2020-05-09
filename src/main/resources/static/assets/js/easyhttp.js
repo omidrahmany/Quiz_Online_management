@@ -20,7 +20,7 @@ class EasyHTTP {
             headers: { "Content-type": "application/json" },
             body: JSON.stringify(data),
             credentials: 'same-origin',
-        })
+        });
         let post = await response.json();
         return post;
     }

@@ -1,6 +1,7 @@
 package io.spring.quiz_online;
 
 import io.spring.quiz_online.config.BasicSettingOnDB;
+import io.spring.quiz_online.excetion_handling.InvalidAccountException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -12,7 +13,11 @@ public class QuizOnlineApplication {
 
         ConfigurableApplicationContext run = SpringApplication.run(QuizOnlineApplication.class, args);
         BasicSettingOnDB basicSettingOnDB = (BasicSettingOnDB) run.getBean("basicSettingOnDB");
-        basicSettingOnDB.insertRolesIntoDB().insertManagerAccountIntoDB();
+        try {
+            basicSettingOnDB.insertRolesIntoDB().insertManagerAccountIntoDB();
+        } catch (InvalidAccountException e) {
+            e.printStackTrace();
+        }
 
 
     }

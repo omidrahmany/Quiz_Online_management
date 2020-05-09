@@ -1,5 +1,6 @@
 package io.spring.quiz_online.service;
 
+import io.spring.quiz_online.excetion_handling.InvalidAccountException;
 import io.spring.quiz_online.model.*;
 import io.spring.quiz_online.repositories.AccountRepository;
 import io.spring.quiz_online.repositories.RoleRepository;
@@ -25,9 +26,13 @@ public class IAccountService implements AccountService {
     }
 
     @Override
-    public void register(RegisteredUserInfo registeredUserInfo) {
+    public void register(RegisteredUserInfo registeredUserInfo) throws InvalidAccountException {
 //        Optional<Account> account = accountRepository.findAccountByUsername(registeredUserInfo.getUsername());
         Role role = roleRepository.findByRole(RoleEnum.valueOf(registeredUserInfo.getRole()));
+        if (registeredUserInfo.getPassword().equals("") | registeredUserInfo.getUsername().equals("") || registeredUserInfo.getEmail().equals("")) {
+            throw new InvalidAccountException("this Account is invalid.");
+        }
+
         Person person = null;
         if (role.getRole().equals(RoleEnum.STUDENT))
             person = new Student(registeredUserInfo.getFirstName(), registeredUserInfo.getLastName(), null);
@@ -49,7 +54,7 @@ public class IAccountService implements AccountService {
 
     @Override
     public Optional<Account> findByUsername(String username) {
-        return Optional.empty();
+        return accountRepository.findAccountByUsername(username);
     }
 
     @Override
@@ -62,6 +67,11 @@ public class IAccountService implements AccountService {
     public void deleteAccountsByRole(RoleEnum roleType) {
         Role role = roleRepository.findByRole(roleType);
         accountRepository.deleteAccountsByRole(role);
+    }
+
+    @Override
+    public Optional<Account> findAccountByEmail(String email) {
+        return accountRepository.findAccountByEmail(email);
     }
 
 
