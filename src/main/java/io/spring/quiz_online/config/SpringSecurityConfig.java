@@ -1,5 +1,6 @@
 package io.spring.quiz_online.config;
 
+import io.spring.quiz_online.model.RoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -42,8 +43,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/registration").permitAll()
                 .antMatchers(HttpMethod.GET, "/assets/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/assets/**").permitAll()
-                .antMatchers("/sign-up/**","/validation/**").permitAll()
+                .antMatchers("/sign-up/**").permitAll()
+                .antMatchers("/manager-home").hasRole(String.valueOf(RoleEnum.MANAGER))
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

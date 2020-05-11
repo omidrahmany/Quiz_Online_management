@@ -1,3 +1,4 @@
+/*----------------- Variables Definition -----------------*/
 let http = new EasyHTTP();
 let firstName = document.querySelector("#first-name");
 let lastName = document.querySelector("#last-name");
@@ -11,8 +12,8 @@ let form = document.querySelector("form");
 let url = serverUrl().concat("/sign-up");
 let option;
 
-
-function checkElementValidation(accountDto) {
+/*----------------- functions Definition -----------------*/
+function checkElementValidation() {
 
     if (firstName.value === "") {
         showMessageToUser("نام را وارد کنید", 'error');
@@ -61,7 +62,6 @@ function clearFields() {
     option.selectedIndex = 0;
 }
 
-
 function showMessageToUser(msg, styleClassName) {
     err.textContent = "";
     err.className = styleClassName;
@@ -72,7 +72,7 @@ function showMessageToUser(msg, styleClassName) {
     }, 5000)
 }
 
-
+/*----------------- Event Definition -----------------*/
 form.addEventListener("submit", e => {
     e.preventDefault();
     option = document.querySelector("#role-options");
@@ -83,17 +83,16 @@ form.addEventListener("submit", e => {
         , "email": email.value.toLowerCase(), "username": username.value.toLowerCase()
         , "password": password.value, "role": role, "isEnable": false
     };
-    let accountDto = new AccountDto(user.firstName, user.lastName, user.username, user.email, user.role, user.isEnable);
 
-    checkElementValidation(accountDto);
+    checkElementValidation();
     http.post(url, user)
         .then(msg => {
             console.log(msg.message);
-            if(msg.typeMessage){
+            if(msg.messageType){
                 showMessageToUser(msg.message, "success");
                 clearFields();
             }
-            else if(!msg.typeMessage) showMessageToUser(msg.message, "error");
+            else if(!msg.messageType) showMessageToUser(msg.message, "error");
         });
 });
 

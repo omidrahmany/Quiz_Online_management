@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/sign-up")
 public class SignUpController {
@@ -33,20 +33,12 @@ public class SignUpController {
     public OutputMsg signUp(@RequestBody RegisteredUserInfo registeredUserInfo) throws InvalidAccountException {
 
         Optional<Account> account = accountService.findAccountByEmail(registeredUserInfo.getEmail());
-        if (account.isPresent()) return new OutputMsg(" .قبلا ثبت نام کرده است " +registeredUserInfo.getEmail() + " حساب با ایمیل ",false);
+        if (account.isPresent()) return new OutputMsg(" .قبلا ایجاد شده است " +registeredUserInfo.getEmail() + " حساب با ایمیل ",false);
 
          account = accountService.findByUsername(registeredUserInfo.getUsername());
-        if (account.isPresent()) return new OutputMsg(" .قبلا ثبت نام کرده است " +registeredUserInfo.getUsername() + " حساب با نام کاربری ",false);
-        /*return account.map(value -> new OutputMsg("Non Unique"))
-                .orElse(new OutputMsg("OK"));*/
+        if (account.isPresent()) return new OutputMsg(" .قبلا ایجاد شده است " +registeredUserInfo.getUsername() + " حساب با نام کاربری ",false);
 
         accountService.register(registeredUserInfo);
         return new OutputMsg(" .با موفقیت انجام شد " + registeredUserInfo.getUsername() + " ثبت نام اولیه با نام کاربری ",true);
     }
-
-
-
-
-
-
 }
