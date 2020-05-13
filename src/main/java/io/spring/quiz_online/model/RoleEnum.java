@@ -1,5 +1,8 @@
 package io.spring.quiz_online.model;
 
 public enum RoleEnum {
-    MANAGER,STUDENT,TEACHER,SUPER_ADMIN
+    ROLE_MANAGER
+    ,ROLE_STUDENT
+    ,ROLE_TEACHER
+    ,ROLE_SUPER_ADMIN
 }

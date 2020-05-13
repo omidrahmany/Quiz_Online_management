@@ -1,8 +1,5 @@
 package io.spring.quiz_online.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,7 +12,7 @@ public class Role {
     private Long roleId;
 
     @Enumerated(EnumType.STRING)
-    private RoleEnum role;
+    private RoleEnum roleType;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
     private Set<Account> accountSet;
@@ -24,7 +21,7 @@ public class Role {
     }
 
     public Role(RoleEnum role, Set<Account> accountSet) {
-        this.role = role;
+        this.roleType = role;
         this.accountSet = accountSet;
     }
 
@@ -36,12 +33,12 @@ public class Role {
         this.roleId = roleId;
     }
 
-    public RoleEnum getRole() {
-        return role;
+    public RoleEnum getRoleType() {
+        return roleType;
     }
 
-    public void setRole(RoleEnum role) {
-        this.role = role;
+    public void setRoleType(RoleEnum roleType) {
+        this.roleType = roleType;
     }
 
     public Set<Account> getAccountSet() {

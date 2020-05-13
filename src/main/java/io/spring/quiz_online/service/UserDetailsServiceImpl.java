@@ -1,6 +1,6 @@
 package io.spring.quiz_online.service;
 
-import io.spring.quiz_online.config.IUserDetails;
+import io.spring.quiz_online.config.UserDetailsImpl;
 import io.spring.quiz_online.model.Account;
 import io.spring.quiz_online.repositories.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +14,12 @@ import java.util.Optional;
 
 
 @Service
-public class IUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private AccountRepository accountRepository;
 
     @Autowired
-    public IUserDetailsService(AccountRepository accountRepository) {
+    public UserDetailsServiceImpl(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
 
@@ -28,6 +28,6 @@ public class IUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Optional<Account> optionalAccount = accountRepository.findAccountByUsername(s);
         optionalAccount.orElseThrow(() -> new UsernameNotFoundException(String.format("The account by username %s not found.", s)));
-        return optionalAccount.map(IUserDetails::new).get();
+        return optionalAccount.map(UserDetailsImpl::new).get();
     }
 }

@@ -10,21 +10,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class IUserDetails implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
     private String username;
     private String password;
     private boolean enabled;
     private List<GrantedAuthority> grantedAuthorityList;
 
-    public IUserDetails(Account account) {
+    public UserDetailsImpl(Account account) {
         this.username = account.getUsername();
         this.password = account.getPassword();
         this.enabled = account.isEnabled();
         this.grantedAuthorityList = Stream.of(account.getRole())
-                .map(role -> new SimpleGrantedAuthority(String.valueOf(role.getRole())))
+                .map(role -> new SimpleGrantedAuthority(String.valueOf(role.getRoleType())))
                 .collect(Collectors.toList());
-        ;
+
+        System.out.println("ROle: ");
+        grantedAuthorityList.forEach(System.out::println);
+
     }
 
     @Override

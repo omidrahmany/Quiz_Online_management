@@ -6,16 +6,16 @@ public class RegisteredUserInfo {
     private String username;
     private String password;
     private String email;
-    private String role;
+    private String roleType;
     private boolean isEnable;
 
-    public RegisteredUserInfo(String firstName, String lastName, String username, String password, String email, String role, boolean isEnable) {
+    public RegisteredUserInfo(String firstName, String lastName, String username, String password, String email, String roleType, boolean isEnable) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.email = email;
-        this.role = role;
+        this.roleType = roleType;
         this.isEnable = isEnable;
     }
 
@@ -59,12 +59,12 @@ public class RegisteredUserInfo {
         this.email = email;
     }
 
-    public String getRole() {
-        return role;
+    public String getRoleType() {
+        return roleType;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoleType(String roleType) {
+        this.roleType = roleType;
     }
 
     public boolean isEnable() {
@@ -83,7 +83,7 @@ public class RegisteredUserInfo {
         private String username;
         private String password;
         private String email;
-        private String role;
+        private String roleType;
         private boolean isEnable;
 
         public RegisteredUserInfoBuilder setFirstName(String firstName) {
@@ -111,8 +111,8 @@ public class RegisteredUserInfo {
             return this;
         }
 
-        public RegisteredUserInfoBuilder setRole(String role) {
-            this.role = role;
+        public RegisteredUserInfoBuilder setRoleType(String roleType) {
+            this.roleType = roleType;
             return this;
         }
 
@@ -122,7 +122,7 @@ public class RegisteredUserInfo {
         }
 
         public RegisteredUserInfo createRegisteredUserInfo() {
-            return new RegisteredUserInfo(firstName, lastName, username, password, email, role, isEnable);
+            return new RegisteredUserInfo(firstName, lastName, username, password, email, roleType, isEnable);
         }
     }
 }

@@ -13,11 +13,7 @@ public class QuizOnlineApplication {
 
         ConfigurableApplicationContext run = SpringApplication.run(QuizOnlineApplication.class, args);
         BasicSettingOnDB basicSettingOnDB = (BasicSettingOnDB) run.getBean("basicSettingOnDB");
-        try {
-            basicSettingOnDB.insertRolesIntoDB().insertManagerAccountIntoDB();
-        } catch (InvalidAccountException e) {
-            e.printStackTrace();
-        }
+        basicSettingOnDB.insertRolesIntoDB().insertManagerAccountIntoDB();
 
 
     }

@@ -1,0 +1,257 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* ----------------------------- CONTAINER ----------------------------- */
+.container{
+    width: 90%;
+    margin: 0 auto;
+
+}
+
+
+/* ----------------------------- NAVBAR ----------------------------- */
+nav{
+    width: 100%;
+    position: absolute;
+    top:0;
+    left:0;
+    margin: 30px 0;
+}
+
+nav .container{
+    display: flex;
+}
+
+nav .brand img{
+    height: 90px;
+}
+
+nav ul{
+    flex: 7;
+    display: flex;
+    list-style:none;
+    justify-content: center;
+    align-items: center;
+}
+
+nav ul li{
+    text-decoration: none;
+    text-align: center;
+    padding: 0 20px;
+}
+
+nav ul li a{
+    text-decoration: none;
+    color: white;
+    font-size:18px;
+    font-family: 'Squada One',cursive;
+    font-size: 400;
+    text-transform: uppercase;
+}
+nav ul li a:hover{
+    border-bottom: 2px darkred solid;
+}
+
+
+nav .brand{
+    flex: 1;
+}
+
+nav .socials{
+    flex: 1.5;
+    align-items: center;
+    display: flex;
+    justify-content: space-around;
+
+
+}
+
+/* ----------------------------- HEADER ----------------------------- */
+
+header{
+    background: url(../imgs/bg.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    min-height: 100vh;
+    padding: 50px 0;
+}
+
+header .container{
+    display:flex;
+    align-items: center;
+    min-height: inherit;
+}
+
+header .header-content{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+header h1{
+    font-family: 'Anton' ;
+    font-size: 112px;
+    line-height: 1;
+    font-weight: 400;
+    color: white;
+    flex-basis: 60%;
+    padding-bottom: 30px;
+}
+
+header p{
+    flex-basis: 100%;
+    font-family: 'Montserrat',sans-serif ;
+    font-size: 18px;
+    font-weight: 400;
+    color: white;
+    padding-bottom: 50px;
+}
+
+header .link{
+    display: flex;
+    flex-basis: 38%;
+    justify-content: space-between;
+}
+
+header .link a{
+    font-family: 'Montserrat',serif ;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: white;
+    padding: 15px 45px;
+    border-radius: 5px;
+}
+header .link a:first-child{
+    border: 2px solid red;
+    background: darkred;
+}
+
+header .link a:last-child{
+    border: 2px solid ;
+    background: transparent;
+}
+
+header .link a:hover:first-child{
+    background: red;
+    font-weight: 600;
+}
+
+header .link a:hover:last-child{
+    background: white;
+    color: black;
+    font-weight: 600;
+}
+
+
+/* ----------------------------- SUBSCRIBE SECTION ----------------------------- */
+section#subscribe{
+    padding: 85px 0;
+    background: rgb(2, 87, 87);
+    display: flex;
+
+}
+
+section#subscribe .container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-basis: 80%;
+}
+
+section#subscribe p{
+    font-family: 'Montserrat',serif ;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1.5;
+    color:white;
+    text-transform: capitalize;
+}
+
+section#subscribe a{
+    text-decoration: none;
+    border: 2px white solid;
+    border-radius: 5px;
+    padding: 10px 10px;
+    color: white;
+    font-family: 'Montserrat',serif ;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-transform: uppercase;
+}
+
+section#subscribe a:hover{
+    background: white;
+    color:rgb(2, 87, 87) ;
+
+}
+
+/* ----------------------------- LAST MATCH RESULT  ----------------------------- */
+
+section#result{
+    padding: 100px 0;
+}
+
+section#result .container{
+    text-align: center;
+}
+section#result h1{
+    font-family: 'Montserrat',serif ;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.5;
+    text-transform: uppercase;
+}
+.underline{
+    width: 35px;
+    border: 2px solid rgb(231, 77, 6);
+    display: inline-block;
+}
+
+section#result .imgs{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 50px 0;
+}
+
+section#result p{
+    font-family: 'Montserrat',serif ;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1;
+    padding-bottom: 30px;
+}
+
+section#result a{
+    display: inline-block;
+    font-family: 'Montserrat',serif ;
+    font-size: 15px;
+    text-transform: uppercase;
+    padding:10px 60px ;
+    border: 1px solid darkred;
+    background: darkred;
+    color: whitesmoke;
+    text-decoration: none;
+    border-radius: 10px;
+}
+
+section#result a:hover{
+    color: darkred;
+    background: white;
+}
+
+section#result .imgs p{
+    color: rgb(3, 51, 70);
+    padding: 15px;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: center;
+}

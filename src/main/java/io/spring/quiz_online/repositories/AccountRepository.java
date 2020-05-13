@@ -1,5 +1,6 @@
 package io.spring.quiz_online.repositories;
 
+import io.spring.quiz_online.dto.AccountDto;
 import io.spring.quiz_online.model.Account;
 import io.spring.quiz_online.model.Role;
 import io.spring.quiz_online.model.RoleEnum;
@@ -14,5 +15,6 @@ public interface AccountRepository extends JpaRepository<Account,Long> {
     Optional<Account> findAccountByEmail(String email);
     List<Account> findAccountsByRole(Role role);
     void deleteAccountsByRole(Role role);
+    Optional<Account> findAccountByUsernameAndPassword(String username, String password);
 
 }

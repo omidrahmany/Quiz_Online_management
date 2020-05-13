@@ -1,4 +1,4 @@
-class EasyHTTP {
+class FetchService {
     async get(url) {
         let response = await fetch(url);
         let users = await response.json();

@@ -1,7 +1,6 @@
 package io.spring.quiz_online.config;
 
 
-import io.spring.quiz_online.excetion_handling.InvalidAccountException;
 import io.spring.quiz_online.model.*;
 import io.spring.quiz_online.repositories.RoleRepository;
 import io.spring.quiz_online.service.AccountService;
@@ -34,15 +33,15 @@ public class BasicSettingOnDB {
         return this;
     }
 
-    public BasicSettingOnDB insertManagerAccountIntoDB() throws InvalidAccountException {
-        if (accountService.findAccountsByRoleType(RoleEnum.MANAGER).size() != 1) {
-            accountService.deleteAccountsByRole(RoleEnum.MANAGER);
+    public BasicSettingOnDB insertManagerAccountIntoDB()  {
+        if (accountService.findAccountsByRoleType(RoleEnum.ROLE_MANAGER).size() != 1) {
+            accountService.deleteAccountsByRole(RoleEnum.ROLE_MANAGER);
             RegisteredUserInfo managerInfo = RegisteredUserInfo.getRegisteredUserInfoBuilder()
                     .setFirstName("Omid")
                     .setLastName("Rahmani")
                     .setEmail("omid.rahmani.ie@gmail.com")
                     .setIsEnable(true)
-                    .setRole("MANAGER")
+                    .setRoleType("manager")
                     .setUsername("manager")
                     .setPassword("manager")
                     .createRegisteredUserInfo();
@@ -57,10 +56,10 @@ public class BasicSettingOnDB {
         Role student = new Role();
         Role teacher = new Role();
         Role manager = new Role();
-        admin.setRole(RoleEnum.SUPER_ADMIN);
-        manager.setRole(RoleEnum.MANAGER);
-        student.setRole(RoleEnum.STUDENT);
-        teacher.setRole(RoleEnum.TEACHER);
+        admin.setRoleType(RoleEnum.ROLE_SUPER_ADMIN);
+        manager.setRoleType(RoleEnum.ROLE_MANAGER);
+        student.setRoleType(RoleEnum.ROLE_STUDENT);
+        teacher.setRoleType(RoleEnum.ROLE_TEACHER);
         roleRepository.save(admin);
         roleRepository.save(student);
         roleRepository.save(teacher);

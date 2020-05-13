@@ -1,5 +1,5 @@
 /*----------------- Variables Definition -----------------*/
-let http = new EasyHTTP();
+let http = new FetchService();
 let firstName = document.querySelector("#first-name");
 let lastName = document.querySelector("#last-name");
 let email = document.querySelector("#email");
@@ -76,13 +76,12 @@ function showMessageToUser(msg, styleClassName) {
 form.addEventListener("submit", e => {
     e.preventDefault();
     option = document.querySelector("#role-options");
-    if (option.selectedIndex === 0) role = 'STUDENT';
-    else if (option.selectedIndex === 1) role = 'TEACHER';
+    if (option.selectedIndex === 0) role = 'student';
+    else if (option.selectedIndex === 1) role = 'teacher';
     let user = {
         "firstName": firstName.value.toLowerCase(), "lastName": lastName.value.toLowerCase()
         , "email": email.value.toLowerCase(), "username": username.value.toLowerCase()
-        , "password": password.value, "role": role, "isEnable": false
-    };
+        , "password": password.value, "roleType": role, "isEnable": false};
 
     checkElementValidation();
     http.post(url, user)

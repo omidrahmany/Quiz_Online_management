@@ -1,19 +1,21 @@
 package io.spring.quiz_online.dto;
 
+import io.spring.quiz_online.model.RoleEnum;
+
 public class AccountDto {
     private String firstName;
     private String lastName;
     private String username;
     private String email;
-    private String role;
+    private String roleType;
     private boolean isEnable;
 
-    public AccountDto(String firstName, String lastName, String username, String email, String role, boolean isEnable) {
+    public AccountDto(String firstName, String lastName, String username, String email, String roleType, boolean isEnable) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.email = email;
-        this.role = role;
+        this.roleType = roleType;
         this.isEnable = isEnable;
     }
 
@@ -50,11 +52,11 @@ public class AccountDto {
     }
 
     public String getRole() {
-        return role;
+        return roleType;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRole(RoleEnum role) {
+        this.roleType = roleType;
     }
 
     public boolean isEnable() {
@@ -72,7 +74,7 @@ public class AccountDto {
         private String lastName;
         private String username;
         private String email;
-        private String role;
+        private String roleType;
         private boolean isEnable;
 
         public AccountDtoBuilder setFirstName(String firstName) {
@@ -95,8 +97,8 @@ public class AccountDto {
             return this;
         }
 
-        public AccountDtoBuilder setRole(String role) {
-            this.role = role;
+        public AccountDtoBuilder setRoleType(String roleType) {
+            this.roleType = roleType;
             return this;
         }
 
@@ -106,7 +108,7 @@ public class AccountDto {
         }
 
         public AccountDto createAccountDto() {
-            return new AccountDto(firstName, lastName, username, email, role, isEnable);
+            return new AccountDto(firstName, lastName, username, email, roleType, isEnable);
         }
     }
 }

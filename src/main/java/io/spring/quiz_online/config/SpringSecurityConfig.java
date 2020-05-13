@@ -1,5 +1,6 @@
 package io.spring.quiz_online.config;
 
+
 import io.spring.quiz_online.model.RoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
@@ -26,7 +28,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    public SpringSecurityConfig(@Qualifier(value = "IUserDetailsService") UserDetailsService userDetailsService) {
+    public SpringSecurityConfig(@Qualifier(value = "userDetailsServiceImpl") UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
@@ -39,25 +41,31 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/registration").permitAll()
+                .antMatchers("/registration", "/sign-in/**", "/", "/login", "/sign-up/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/assets/**").permitAll()
-                .antMatchers("/sign-up/**").permitAll()
-                .antMatchers("/manager-home").hasRole(String.valueOf(RoleEnum.MANAGER))
+                .antMatchers("/manager-home","/manager/**").hasAnyRole("MANAGER")
                 .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
-//                .defaultSuccessUrl("/home")
                 .and()
                 .httpBasic()
                 .and()
-                .logout().logoutUrl("/logout")
+
+                /*.formLogin()
+                .loginPage("/login")
+                .and()
+                .logout()
+                .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
+                .deleteCookies("JSESSIONID")*/
+
+                .formLogin().disable()
+                .logout().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
 
 
         ;
