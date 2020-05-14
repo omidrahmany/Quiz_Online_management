@@ -16,5 +16,7 @@ public interface AccountRepository extends JpaRepository<Account,Long> {
     List<Account> findAccountsByRole(Role role);
     void deleteAccountsByRole(Role role);
     Optional<Account> findAccountByUsernameAndPassword(String username, String password);
+    Optional<List<Account>> findAccountsByEnabledFalse();
+    void deleteAccountByUsername(String username);
 
 }

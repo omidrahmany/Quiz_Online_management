@@ -24,10 +24,6 @@ public class UserDetailsImpl implements UserDetails {
         this.grantedAuthorityList = Stream.of(account.getRole())
                 .map(role -> new SimpleGrantedAuthority(String.valueOf(role.getRoleType())))
                 .collect(Collectors.toList());
-
-        System.out.println("ROle: ");
-        grantedAuthorityList.forEach(System.out::println);
-
     }
 
     @Override

@@ -1,3 +1,3 @@
 function serverUrl() {
-    return "http://localhost:8081"
+    return "http://localhost:8081";
 }

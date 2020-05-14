@@ -3,6 +3,7 @@ package io.spring.quiz_online.dto;
 import io.spring.quiz_online.model.RoleEnum;
 
 public class AccountDto {
+    private Long accountId;
     private String firstName;
     private String lastName;
     private String username;
@@ -10,7 +11,24 @@ public class AccountDto {
     private String roleType;
     private boolean isEnable;
 
-    public AccountDto(String firstName, String lastName, String username, String email, String roleType, boolean isEnable) {
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
+    }
+
+    public String getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(String roleType) {
+        this.roleType = roleType;
+    }
+
+    public AccountDto(Long accountId, String firstName, String lastName, String username, String email, String roleType, boolean isEnable) {
+        this.accountId = accountId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -67,15 +85,23 @@ public class AccountDto {
         isEnable = enable;
     }
 
-    public static AccountDtoBuilder getInstance(){return new AccountDtoBuilder();}
+    public static AccountDtoBuilder getInstance() {
+        return new AccountDtoBuilder();
+    }
 
     public static class AccountDtoBuilder {
+        private Long accountId;
         private String firstName;
         private String lastName;
         private String username;
         private String email;
         private String roleType;
         private boolean isEnable;
+
+        public AccountDtoBuilder setAccountId(Long accountId) {
+            this.accountId = accountId;
+            return this;
+        }
 
         public AccountDtoBuilder setFirstName(String firstName) {
             this.firstName = firstName;
@@ -108,7 +134,7 @@ public class AccountDto {
         }
 
         public AccountDto createAccountDto() {
-            return new AccountDto(firstName, lastName, username, email, roleType, isEnable);
+            return new AccountDto(accountId,firstName, lastName, username, email, roleType, isEnable);
         }
     }
 }

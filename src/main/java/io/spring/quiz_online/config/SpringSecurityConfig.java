@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -47,28 +48,41 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/registration", "/sign-in/**", "/", "/login", "/sign-up/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/assets/**").permitAll()
-                .antMatchers("/manager-home","/manager/**").hasAnyRole("MANAGER")
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic()
-                .and()
 
-                /*.formLogin()
+                .antMatchers( "/manager/**" , "/manager-panel").hasRole("MANAGER")
+                .antMatchers( "/student/**" , "/student-profile").hasRole("STUDENT")
+                // Disallow everything else..
+                .anyRequest().authenticated()
+        .and()
+                .httpBasic()
+        .and()
+                .formLogin()
                 .loginPage("/login")
-                .and()
+                .successHandler(myAuthenticationSuccessHandler())
+        .and()
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")*/
-
+                .deleteCookies("JSESSIONID")
+        /*
                 .formLogin().disable()
                 .logout().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
+                 // No session will be created or used by spring security
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)*/
 
+        .and()
+
+                // If a user try to access a resource without having enough permissions
+                .exceptionHandling().accessDeniedPage("/login")
 
         ;
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
+        return new MySimpleUrlAuthenticationSuccessHandler();
     }
 
 

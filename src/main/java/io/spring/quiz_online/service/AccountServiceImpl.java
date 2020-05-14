@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -99,5 +102,36 @@ public class AccountServiceImpl implements AccountService {
                 .createAccountDto()).orElse(null);
     }
 
+    @Override
+    public List<AccountDto> findAccountsNotEnabled() {
+        Optional<List<Account>> accountsNotEnabled = accountRepository.findAccountsByEnabledFalse();
+        Function<Account, AccountDto> dtoFunction =
+                account -> {
+                    return AccountDto.getInstance()
+                            .setAccountId(account.getAccountId())
+                            .setRoleType(stringRole(account.getRole().getRoleType()))
+                            .setIsEnable(account.isEnabled())
+                            .setUsername(account.getUsername())
+                            .setLastName(account.getPerson().getLastName())
+                            .setFirstName(account.getPerson().getFirstName())
+                            .setEmail(account.getEmail())
+                            .createAccountDto();
+                };
+        return accountsNotEnabled
+                .map(
+                        accounts -> accounts
+                                .stream()
+                                .map(dtoFunction)
+                                .collect(Collectors.toList()))
+                .orElse(null);
+    }
 
+    @Override
+    public void deleteAccount(Long id) {
+        accountRepository.deleteById(id);
+    }
+
+    private String stringRole(RoleEnum roleType) {
+        return roleType == RoleEnum.ROLE_STUDENT ? "دانشجو" : "استاد";
+    }
 }

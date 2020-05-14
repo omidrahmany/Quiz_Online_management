@@ -18,5 +18,7 @@ public interface AccountService {
     void deleteAccountsByRole(RoleEnum roleType);
     Optional<Account> findAccountByEmail(String email);
    AccountDto findAccountByUsernameAndPassword(String username, String password);
+   List<AccountDto> findAccountsNotEnabled();
+   void deleteAccount(Long id);
 
 }
