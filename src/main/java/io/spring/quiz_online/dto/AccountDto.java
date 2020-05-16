@@ -11,22 +11,6 @@ public class AccountDto {
     private String roleType;
     private boolean isEnable;
 
-    public Long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
-    }
-
-    public String getRoleType() {
-        return roleType;
-    }
-
-    public void setRoleType(String roleType) {
-        this.roleType = roleType;
-    }
-
     public AccountDto(Long accountId, String firstName, String lastName, String username, String email, String roleType, boolean isEnable) {
         this.accountId = accountId;
         this.firstName = firstName;
@@ -36,6 +20,20 @@ public class AccountDto {
         this.roleType = roleType;
         this.isEnable = isEnable;
     }
+
+    public static AccountDtoBuilder getInstance() {
+        return new AccountDtoBuilder();
+    }
+
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
+    }
+
+
 
     public String getFirstName() {
         return firstName;
@@ -69,13 +67,14 @@ public class AccountDto {
         this.email = email;
     }
 
-    public String getRole() {
+    public String getRoleType() {
         return roleType;
     }
 
-    public void setRole(RoleEnum role) {
+    public void setRoleType(String roleType) {
         this.roleType = roleType;
     }
+
 
     public boolean isEnable() {
         return isEnable;
@@ -83,10 +82,6 @@ public class AccountDto {
 
     public void setEnable(boolean enable) {
         isEnable = enable;
-    }
-
-    public static AccountDtoBuilder getInstance() {
-        return new AccountDtoBuilder();
     }
 
     public static class AccountDtoBuilder {

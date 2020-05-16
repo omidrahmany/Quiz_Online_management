@@ -17,13 +17,9 @@ public class Role {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
     private Set<Account> accountSet;
 
-    public Role() {
-    }
 
-    public Role(RoleEnum role, Set<Account> accountSet) {
-        this.roleType = role;
-        this.accountSet = accountSet;
-    }
+
+
 
     public Long getRoleId() {
         return roleId;

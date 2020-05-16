@@ -13,12 +13,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/student")
-public class StudentProfileController {
+public class StudentController {
     private AuthenticationFacade authenticationFacade;
     private AccountService accountService;
 
     @Autowired
-    public StudentProfileController(AuthenticationFacade authenticationFacade, AccountService accountService) {
+    public StudentController(AuthenticationFacade authenticationFacade, AccountService accountService) {
         this.authenticationFacade = authenticationFacade;
         this.accountService = accountService;
     }
@@ -26,13 +26,6 @@ public class StudentProfileController {
     @GetMapping("/get-student-info")
     public AccountDto getStudentAccountAuthenticated() {
         String username = authenticationFacade.getAuthentication().getName();
-        Optional<Account> account = accountService.findByUsername(username);
-        return account.map(value -> AccountDto.getInstance()
-                .setFirstName(value.getPerson().getFirstName())
-                .setLastName(value.getPerson().getLastName())
-                .setUsername(value.getUsername())
-                .setIsEnable(account.get().isEnabled())
-                .setRoleType(String.valueOf(account.get().getRole().getRoleType()))
-                .createAccountDto()).orElse(null);
+        return accountService.findByUsername(username);
     }
 }

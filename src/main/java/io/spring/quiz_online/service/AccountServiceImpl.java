@@ -1,18 +1,20 @@
 package io.spring.quiz_online.service;
 
 import io.spring.quiz_online.dto.AccountDto;
-import io.spring.quiz_online.dto.SignInAccountDto;
 import io.spring.quiz_online.model.*;
 import io.spring.quiz_online.repositories.AccountRepository;
+import io.spring.quiz_online.repositories.PersonRepository;
 import io.spring.quiz_online.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.InvalidRoleInfoException;
+import javax.management.relation.InvalidRoleValueException;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,14 +35,9 @@ public class AccountServiceImpl implements AccountService {
     public void register(RegisteredUserInfo registeredUserInfo) {
         RoleEnum roleType = getEnumRoleType(registeredUserInfo.getRoleType());
         Role role = roleRepository.findByRoleType(roleType);
-        Person person = null;
+        Person person ;
         assert roleType != null;
-        if (roleType.equals(RoleEnum.ROLE_STUDENT))
-            person = new Student(registeredUserInfo.getFirstName(), registeredUserInfo.getLastName(), null);
-        else if (roleType.equals(RoleEnum.ROLE_TEACHER))
-            person = new Teacher(registeredUserInfo.getFirstName(), registeredUserInfo.getLastName(), null);
-        else if (roleType.equals(RoleEnum.ROLE_MANAGER))
-            person = new Manager(registeredUserInfo.getFirstName(), registeredUserInfo.getLastName(), null);
+        person = createNewPerson(roleType, registeredUserInfo.getFirstName(), registeredUserInfo.getLastName());
 
         Account account = Account.getAccountBuilder()
                 .setUsername(registeredUserInfo.getUsername())
@@ -51,6 +48,47 @@ public class AccountServiceImpl implements AccountService {
                 .setPerson(person)
                 .createAccount();
         accountRepository.save(account);
+    }
+
+    private Person createNewPerson(RoleEnum roleType, String firstName, String lastName) {
+        if (roleType.equals(RoleEnum.ROLE_STUDENT))
+            return new Student(firstName, lastName, null);
+        else if (roleType.equals(RoleEnum.ROLE_TEACHER))
+            return new Teacher(firstName, lastName, null);
+        else if (roleType.equals(RoleEnum.ROLE_MANAGER))
+            return new Manager(firstName, lastName, null);
+        return null;
+    }
+
+    @Override
+    public void updateAccount(AccountDto accountDto) {
+
+        Optional<Account> accountOptional = accountRepository.findById(accountDto.getAccountId());
+        Role role = roleRepository.findByRoleType(getEnumRoleType(accountDto.getRoleType()));
+
+        if (accountOptional.isPresent()) {
+            Account account = accountOptional.get();
+            account.setUsername(accountDto.getUsername());
+            account.setEmail(accountDto.getEmail());
+            account.setEnabled(accountDto.isEnable());
+
+
+            // compare saved person's role with new one
+            // to update tables of Person's Children. (Teacher, Student or Manager Tables)
+            // if equals ---> update first name and last name
+            // otherwise ---> create new person and assign to account
+            if (account.getRole().getRoleType().equals(role.getRoleType())) {
+                account.getPerson().setLastName(accountDto.getLastName());
+                account.getPerson().setFirstName(accountDto.getFirstName());
+
+            } else {
+                Person newPerson = createNewPerson(role.getRoleType(), accountDto.getFirstName(), accountDto.getLastName());
+                account.setPerson(newPerson);
+            }
+            account.setRole(role);
+            accountRepository.save(account);
+        } else
+            throw new UsernameNotFoundException(String.format("account by username %s not found.", accountDto.getUsername()));
     }
 
     private RoleEnum getEnumRoleType(String roleType) {
@@ -69,8 +107,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<Account> findByUsername(String username) {
-        return accountRepository.findAccountByUsername(username);
+    public AccountDto findByUsername(String username) {
+        return accountRepository
+                .findAccountByUsername(username)
+                .map(mapAccountToAccountDtoFunction())
+                .orElse(null);
     }
 
     @Override
@@ -86,42 +127,27 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<Account> findAccountByEmail(String email) {
-        return accountRepository.findAccountByEmail(email);
+    public AccountDto findAccountByEmail(String email) {
+        return accountRepository
+                .findAccountByEmail(email)
+                .map(mapAccountToAccountDtoFunction())
+                .orElse(null);
     }
 
     @Override
     public AccountDto findAccountByUsernameAndPassword(String username, String password) {
         Optional<Account> account = accountRepository.findAccountByUsernameAndPassword(username, password);
-        return account.map(value -> AccountDto.getInstance()
-                .setUsername(value.getUsername())
-                .setRoleType(String.valueOf(value.getRole().getRoleType()))
-                .setIsEnable(value.isEnabled())
-                .setFirstName(value.getPerson().getFirstName())
-                .setLastName(value.getPerson().getLastName())
-                .createAccountDto()).orElse(null);
+        return account.map(mapAccountToAccountDtoFunction()).orElse(null);
     }
 
     @Override
     public List<AccountDto> findAccountsNotEnabled() {
         Optional<List<Account>> accountsNotEnabled = accountRepository.findAccountsByEnabledFalse();
-        Function<Account, AccountDto> dtoFunction =
-                account -> {
-                    return AccountDto.getInstance()
-                            .setAccountId(account.getAccountId())
-                            .setRoleType(stringRole(account.getRole().getRoleType()))
-                            .setIsEnable(account.isEnabled())
-                            .setUsername(account.getUsername())
-                            .setLastName(account.getPerson().getLastName())
-                            .setFirstName(account.getPerson().getFirstName())
-                            .setEmail(account.getEmail())
-                            .createAccountDto();
-                };
         return accountsNotEnabled
                 .map(
                         accounts -> accounts
                                 .stream()
-                                .map(dtoFunction)
+                                .map(mapAccountToAccountDtoFunction())
                                 .collect(Collectors.toList()))
                 .orElse(null);
     }
@@ -131,7 +157,38 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.deleteById(id);
     }
 
-    private String stringRole(RoleEnum roleType) {
-        return roleType == RoleEnum.ROLE_STUDENT ? "دانشجو" : "استاد";
+    @Override
+    public AccountDto findById(Long accountId) {
+        return accountRepository.findById(accountId).map(mapAccountToAccountDtoFunction()).orElse(null);
+
+    }
+
+
+    private String getStringRole(RoleEnum roleType) throws InvalidRoleValueException {
+        if (roleType.equals(RoleEnum.ROLE_STUDENT)) return "student";
+        else if (roleType.equals(RoleEnum.ROLE_TEACHER)) return "teacher";
+        else if (roleType.equals(RoleEnum.ROLE_MANAGER)) return "manager";
+        else if (roleType.equals(RoleEnum.ROLE_SUPER_ADMIN)) return "super-admin";
+        throw new InvalidRoleValueException("Role Type is invalid one.");
+    }
+
+
+    private Function<Account, AccountDto> mapAccountToAccountDtoFunction() {
+        return account -> {
+            try {
+                return AccountDto.getInstance()
+                        .setAccountId(account.getAccountId())
+                        .setRoleType(getStringRole(account.getRole().getRoleType()))
+                        .setIsEnable(account.isEnabled())
+                        .setUsername(account.getUsername())
+                        .setLastName(account.getPerson().getLastName())
+                        .setFirstName(account.getPerson().getFirstName())
+                        .setEmail(account.getEmail())
+                        .createAccountDto();
+            } catch (InvalidRoleValueException e) {
+                e.printStackTrace();
+            }
+            return null;
+        };
     }
 }

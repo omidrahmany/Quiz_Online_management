@@ -1,10 +1,13 @@
 class AccountDto {
-    constructor(firstName, lastName, username, email, role, isEnable) {
+    constructor(accountId,firstName, lastName, username, email, roleType, isEnable) {
+        this.accountId = accountId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.email = email;
-        this.role = role;
+        this.roleType = roleType;
         this.isEnable = isEnable;
     }
+
+
 }
