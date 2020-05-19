@@ -12,9 +12,12 @@ import org.springframework.stereotype.Service;
 
 import javax.management.relation.InvalidRoleInfoException;
 import javax.management.relation.InvalidRoleValueException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +38,7 @@ public class AccountServiceImpl implements AccountService {
     public void register(RegisteredUserInfo registeredUserInfo) {
         RoleEnum roleType = getEnumRoleType(registeredUserInfo.getRoleType());
         Role role = roleRepository.findByRoleType(roleType);
-        Person person ;
+        Person person;
         assert roleType != null;
         person = createNewPerson(roleType, registeredUserInfo.getFirstName(), registeredUserInfo.getLastName());
 
@@ -158,9 +161,43 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public List<AccountDto> findAllAccounts() {
+        return accountRepository
+                .findAll()
+                .stream()
+                .map(mapAccountToAccountDtoFunction())
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public AccountDto findById(Long accountId) {
         return accountRepository.findById(accountId).map(mapAccountToAccountDtoFunction()).orElse(null);
 
+    }
+
+    @Override
+    public List<AccountDto> findAllTeachersAndStudentsRole() {
+        Optional<List<Account>> students = accountRepository.findAllByRole_RoleType(RoleEnum.ROLE_STUDENT);
+        Optional<List<Account>> teachers = accountRepository.findAllByRole_RoleType(RoleEnum.ROLE_TEACHER);
+        List<AccountDto> result = new ArrayList<>();
+        if(students.isPresent() && teachers.isPresent()) {
+            List<AccountDto> studentsAccountDto = students.map(accounts -> accounts.stream()
+                    .map(mapAccountToAccountDtoFunction()).collect(Collectors.toList())).get();
+            List<AccountDto> teachersAccountDto = teachers.map(accounts -> accounts.stream()
+                    .map(mapAccountToAccountDtoFunction()).collect(Collectors.toList())).get();
+            result.addAll(studentsAccountDto);
+            result.addAll(teachersAccountDto);
+        }
+        else if(students.isPresent()){
+            result = students.map(accounts -> accounts.stream()
+                    .map(mapAccountToAccountDtoFunction()).collect(Collectors.toList())).get();
+        }
+        else if(teachers.isPresent()){
+            result = teachers.map(accounts -> accounts.stream()
+                    .map(mapAccountToAccountDtoFunction()).collect(Collectors.toList())).get();
+        }
+        Collections.sort(result);
+        return result;
     }
 
 
@@ -171,7 +208,6 @@ public class AccountServiceImpl implements AccountService {
         else if (roleType.equals(RoleEnum.ROLE_SUPER_ADMIN)) return "super-admin";
         throw new InvalidRoleValueException("Role Type is invalid one.");
     }
-
 
     private Function<Account, AccountDto> mapAccountToAccountDtoFunction() {
         return account -> {

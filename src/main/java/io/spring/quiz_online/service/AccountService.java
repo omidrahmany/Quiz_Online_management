@@ -18,7 +18,9 @@ public interface AccountService {
    AccountDto findAccountByUsernameAndPassword(String username, String password);
    List<AccountDto> findAccountsNotEnabled();
    void deleteAccount(Long id);
+   List<AccountDto> findAllAccounts();
 
    AccountDto findById(Long accountId);
+   List<AccountDto> findAllTeachersAndStudentsRole();
 
 }

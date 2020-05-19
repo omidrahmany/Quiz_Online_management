@@ -1,19 +1,8 @@
 /*----------------- Variables Definition -----------------*/
 let fetchApi = new FetchService();
-let url = serverUrl().concat("/manager/non-active-students");
+let url = serverUrl().concat("/manager/get-all-accounts");
 let deleteUrl = serverUrl().concat("/manager/delete-account/");
-let th = `<tr >
-                <th > حذف </th> 
-                <th > ویرایش </th>
-                <th > وضعیت حساب </th>
-                <th > ایمیل </th>  
-                 <th > نام کاربری </th>
-                <th > نقش کاربری </th>
-                <th > نام خانوادگی </th>
-                <th > نام</th>
-                <th >ردیف</th>                                
-            </tr>`;
-let tr;
+
 
 /*-------- Modal Variables --------*/
 let firstName = document.querySelector("#first-name");
@@ -26,7 +15,18 @@ let enabledStatus = document.querySelector("#status");
 
 /*-------- table Variables --------*/
 let table = document.querySelector("table");
-
+let th = `<tr >
+                <th > حذف </th> 
+                <th > ویرایش </th>
+                <th > وضعیت حساب </th>
+                <th > ایمیل </th>  
+                 <th > نام کاربری </th>
+                <th > نقش کاربری </th>
+                <th > نام خانوادگی </th>
+                <th > نام</th>
+                <th >ردیف</th>                                
+            </tr>`;
+let tr;
 
 /*----------------- Function Definition -----------------*/
 
@@ -52,23 +52,25 @@ function setUserInfoToModal(id) {
 
 function updateTableInfo() {
     fetchApi.get(url).then(data => {
-        let i = 0;
-        tr = th;
-        data.forEach(account => {
-            let status;
-            if (account.enable) status = "فعال";
-            else status = 'غیرفعال';
-            let roleOption;
-            account.roleType === "student" ? roleOption = "دانشجو" : roleOption = "استاد";
-            i++;
+        if (data.length !== 0) {
+            document.querySelector("#nothing-msg").style.display = "none";
+            let i = 0;
+            tr = th;
+            data.forEach(account => {
+                let status;
+                if (account.enable) status = "فعال";
+                else status = 'غیرفعال';
+                let roleOption;
+                account.roleType === "student" ? roleOption = "دانشجو" : roleOption = "استاد";
+                i++;
 
-            tr += `
+                tr += `
                 <tr> 
-                    <td > <a href="#">
+                    <td >
                     <button type='button' class="btn btn-danger"  onclick='deleteAccount(deleteUrl.concat(${account.accountId}))'>
                     حذف
                     </button>
-                    </a> </td>
+                     </td>
                     <td >              
                     <!-- Button trigger modal -->
                     <button type="button" onclick='setUserInfoToModal(${account.accountId})'  class="btn btn-success" data-toggle="modal" data-target="#showModal">
@@ -83,14 +85,15 @@ function updateTableInfo() {
                      <td >${account.firstName}</td>
                     <td >${i}</td>
                 </tr>`;
-        });
-        table.innerHTML = tr;
+            });
+            table.innerHTML = tr;
+        }
     });
 }
 
 /*----------------- Event Definition -----------------*/
 
-document.addEventListener("DOMContentLoaded",updateTableInfo());
+document.addEventListener("DOMContentLoaded", updateTableInfo());
 
 
 document.querySelector("#save-change").addEventListener("click", () => {
@@ -103,7 +106,7 @@ document.querySelector("#save-change").addEventListener("click", () => {
         .then(data => {
             console.log(data.message);
         });
-$("#showModal").modal('hide');
+    $("#showModal").modal('hide');
     updateTableInfo();
     location.reload();
 });

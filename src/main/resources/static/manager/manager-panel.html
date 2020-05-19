@@ -2,26 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
-          integrity="sha256-ECB9bbROLGm8wOoEbHcHRxlHgzGqYpDtNTgDTyDz0wg=" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+
     <title>پنل مدیریت</title>
 </head>
 <body>
-<h3>به پنل مدیریت خوش آمدید.</h3>
+
 <div class="container">
-    <div>
-        <a href="/logout">خروج</a>
-    </div>
-    <div>
-        <a href="/non-active-students">لیست افراد غبرفعال</a>
+    <div class="col-md-12 mx-auto text-right bg-primary rounded mt-5 p-3">
+        <h3 > .به پنل مدیریت خوش آمدید </h3>
+        <div class="bg-secondary">
+            <a href="/logout">خروج</a>
+        </div>
+        <div class="bg-secondary">
+            <a href="/all-accounts"> لیست کاربران  </a>
+        </div>
+        <div class="bg-secondary">
+            <a href="/non-active-accounts"> لیست کاربران غیرفعال </a>
+        </div>
     </div>
 
 
 </div>
 
 
+<script src="/assets/js/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+
 <script src="/assets/js/fetch-service.js"></script>
 <script src="/assets/js/server-url.js"></script>
-<script src="/static/assets/js/manager-panel.js"></script></body>
+<script src="/assets/js/manager-panel.js"></script>
+</body>
 </body>
 </html>

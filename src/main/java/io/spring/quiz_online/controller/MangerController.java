@@ -33,8 +33,8 @@ public class MangerController {
     }
 
 
-    @GetMapping("/non-active-students")
-    public List<AccountDto> getStudentsInactivated() {
+    @GetMapping("/get-non-active-accounts")
+    public List<AccountDto> getAccountsInactivated() {
         return accountService.findAccountsNotEnabled();
     }
 
@@ -52,6 +52,11 @@ public class MangerController {
     public ResultMsg updateAccount(@RequestBody AccountDto accountDto){
         accountService.updateAccount(accountDto);
         return new ResultMsg( " اعمال تغییرات با موفقیت انجام شد. " , true);
+    }
+
+    @GetMapping("/get-all-accounts")
+    public List<AccountDto> getAllAccounts(){
+        return accountService.findAllTeachersAndStudentsRole();
     }
 
 

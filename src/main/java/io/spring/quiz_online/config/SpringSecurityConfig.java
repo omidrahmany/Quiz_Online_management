@@ -49,7 +49,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/registration", "/sign-in/**", "/", "/login", "/sign-up/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/assets/**").permitAll()
 
-                .antMatchers( "/manager/**" , "/manager-panel").hasRole("MANAGER")
+                .antMatchers( "/manager/**" ).hasRole("MANAGER")
                 .antMatchers( "/student/**" , "/student-profile").hasRole("STUDENT")
                 // Disallow everything else..
                 .anyRequest().authenticated()

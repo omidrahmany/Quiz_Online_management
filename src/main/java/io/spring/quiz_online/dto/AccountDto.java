@@ -1,8 +1,7 @@
 package io.spring.quiz_online.dto;
 
-import io.spring.quiz_online.model.RoleEnum;
 
-public class AccountDto {
+public class AccountDto implements Comparable<AccountDto> {
     private Long accountId;
     private String firstName;
     private String lastName;
@@ -11,7 +10,7 @@ public class AccountDto {
     private String roleType;
     private boolean isEnable;
 
-    public AccountDto(Long accountId, String firstName, String lastName, String username, String email, String roleType, boolean isEnable) {
+    private AccountDto(Long accountId, String firstName, String lastName, String username, String email, String roleType, boolean isEnable) {
         this.accountId = accountId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -32,7 +31,6 @@ public class AccountDto {
     public void setAccountId(Long accountId) {
         this.accountId = accountId;
     }
-
 
 
     public String getFirstName() {
@@ -84,6 +82,11 @@ public class AccountDto {
         isEnable = enable;
     }
 
+    @Override
+    public int compareTo(AccountDto o) {
+        return o.accountId.compareTo(this.accountId);
+    }
+
     public static class AccountDtoBuilder {
         private Long accountId;
         private String firstName;
@@ -129,7 +132,7 @@ public class AccountDto {
         }
 
         public AccountDto createAccountDto() {
-            return new AccountDto(accountId,firstName, lastName, username, email, roleType, isEnable);
+            return new AccountDto(accountId, firstName, lastName, username, email, roleType, isEnable);
         }
     }
 }
