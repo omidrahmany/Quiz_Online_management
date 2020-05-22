@@ -13,13 +13,9 @@ public class QuizOnlineApplication {
     private static PersonRepository personRepository;
 
     public static void main(String[] args) {
-
         ConfigurableApplicationContext run = SpringApplication.run(QuizOnlineApplication.class, args);
         BasicSettingOnDB basicSettingOnDB = (BasicSettingOnDB) run.getBean("basicSettingOnDB");
         basicSettingOnDB.insertRolesIntoDB().insertManagerAccountIntoDB();
-
-
-
     }
 
 }

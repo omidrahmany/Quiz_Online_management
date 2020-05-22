@@ -1,5 +1,7 @@
 package io.spring.quiz_online.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 
@@ -64,8 +66,5 @@ public class Person {
     }
 
 
-
-
-    // test
 
 }

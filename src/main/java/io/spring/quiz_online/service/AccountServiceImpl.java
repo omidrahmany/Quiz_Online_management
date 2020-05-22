@@ -55,9 +55,9 @@ public class AccountServiceImpl implements AccountService {
 
     private Person createNewPerson(RoleEnum roleType, String firstName, String lastName) {
         if (roleType.equals(RoleEnum.ROLE_STUDENT))
-            return new Student(firstName, lastName, null);
+            return new Student(firstName, lastName, null, null);
         else if (roleType.equals(RoleEnum.ROLE_TEACHER))
-            return new Teacher(firstName, lastName, null);
+            return new Teacher(firstName, lastName, null, null);
         else if (roleType.equals(RoleEnum.ROLE_MANAGER))
             return new Manager(firstName, lastName, null);
         return null;
@@ -76,10 +76,10 @@ public class AccountServiceImpl implements AccountService {
             account.setEnabled(accountDto.isEnable());
 
 
-            // compare saved person's role with new one
-            // to update tables of Person's Children. (Teacher, Student or Manager Tables)
-            // if equals ---> update first name and last name
-            // otherwise ---> create new person and assign to account
+             /* compare saved person's role with new one
+              * to update tables of Person's Children. (Teacher, Student or Manager Tables)
+              * if equals ---> update first name and last name
+              * otherwise ---> create new person and assign to account*/
             if (account.getRole().getRoleType().equals(role.getRoleType())) {
                 account.getPerson().setLastName(accountDto.getLastName());
                 account.getPerson().setFirstName(accountDto.getFirstName());
@@ -180,19 +180,17 @@ public class AccountServiceImpl implements AccountService {
         Optional<List<Account>> students = accountRepository.findAllByRole_RoleType(RoleEnum.ROLE_STUDENT);
         Optional<List<Account>> teachers = accountRepository.findAllByRole_RoleType(RoleEnum.ROLE_TEACHER);
         List<AccountDto> result = new ArrayList<>();
-        if(students.isPresent() && teachers.isPresent()) {
+        if (students.isPresent() && teachers.isPresent()) {
             List<AccountDto> studentsAccountDto = students.map(accounts -> accounts.stream()
                     .map(mapAccountToAccountDtoFunction()).collect(Collectors.toList())).get();
             List<AccountDto> teachersAccountDto = teachers.map(accounts -> accounts.stream()
                     .map(mapAccountToAccountDtoFunction()).collect(Collectors.toList())).get();
             result.addAll(studentsAccountDto);
             result.addAll(teachersAccountDto);
-        }
-        else if(students.isPresent()){
+        } else if (students.isPresent()) {
             result = students.map(accounts -> accounts.stream()
                     .map(mapAccountToAccountDtoFunction()).collect(Collectors.toList())).get();
-        }
-        else if(teachers.isPresent()){
+        } else if (teachers.isPresent()) {
             result = teachers.map(accounts -> accounts.stream()
                     .map(mapAccountToAccountDtoFunction()).collect(Collectors.toList())).get();
         }

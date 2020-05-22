@@ -1,16 +1,15 @@
 package io.spring.quiz_online.controller;
 
 import io.spring.quiz_online.dto.AccountDto;
-import io.spring.quiz_online.model.Account;
+import io.spring.quiz_online.dto.TeacherDto;
+import io.spring.quiz_online.model.Course;
 import io.spring.quiz_online.model.ResultMsg;
-import io.spring.quiz_online.repositories.AccountRepository;
 import io.spring.quiz_online.service.AccountService;
 import io.spring.quiz_online.service.AuthenticationFacade;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.spring.quiz_online.service.CourseService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -19,11 +18,12 @@ public class MangerController {
 
     private AuthenticationFacade authenticationFacade;
     private AccountService accountService;
+    private CourseService courseService;
 
-    public MangerController(AuthenticationFacade authenticationFacade, AccountService accountService) {
+    public MangerController(CourseService courseService,AuthenticationFacade authenticationFacade, AccountService accountService) {
         this.authenticationFacade = authenticationFacade;
         this.accountService = accountService;
-
+        this.courseService = courseService;
     }
 
     @GetMapping("/get-manager-info")
@@ -54,9 +54,24 @@ public class MangerController {
         return new ResultMsg( " اعمال تغییرات با موفقیت انجام شد. " , true);
     }
 
+
+    // return all accounts but manager account. all teachers and students accounts (enabled and disabled accounts)
     @GetMapping("/get-all-accounts")
     public List<AccountDto> getAllAccounts(){
         return accountService.findAllTeachersAndStudentsRole();
+    }
+
+
+
+    // return enabled teacher accounts to assign to courses.
+    @GetMapping("/get-all-active-teachers")
+    public List<TeacherDto> getAllTeachers(){
+        return courseService.findAllTeachersByAccountEnabled();
+    }
+
+    @GetMapping("/get-all-courses")
+    public List<Course> getAllCourses(){
+        return courseService.findAll();
     }
 
 
