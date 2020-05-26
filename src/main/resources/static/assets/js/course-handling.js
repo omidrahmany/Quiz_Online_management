@@ -15,10 +15,10 @@ let createCourseBtn = document.querySelector("#create-course");
 let teachersOption = document.querySelector("#teachers-name");
 let studentsOption = document.querySelector("#students-name");
 let finalCreateCourseBtn = document.querySelector("#confirm-creating-course");
-let teacherDataListOption=''; // Initialization is necessary. don't change this otherwise the list of teachers won't create.
-let studentDataListOption=''; // Initialization is necessary. don't change this otherwise the list of students won't create.
+let teacherDataListOption = ''; // Initialization is necessary. don't change this otherwise the list of teachers won't create.
+let studentDataListOption = ''; // Initialization is necessary. don't change this otherwise the list of students won't create.
 let errMsg = document.querySelector("#err-msg");
-
+let selectedTeacherId = '';
 
 /*-------- table Variables --------*/
 let table = document.querySelector("table");
@@ -79,8 +79,8 @@ function clearErrMsg() {
     errMsg.textContent = "";
 }
 
-function addTeachersToList(){
-    teacherDataListOption = `<option id="-1" selected>گزینه ای انتخاب نشده</option>`;
+function addTeachersToList() {
+    teacherDataListOption = `<option id="-1" selected>-</option>`;
     fetchApi.get(url.concat("get-all-active-teachers"))
         .then(teachers => {
             teachers.forEach(teacher => {
@@ -102,24 +102,6 @@ function addStudentsToList() {
             console.log(studentDataListOption);
             console.log(studentsOption);
         });
-    // studentsOption.bsMultiSelect();
-   /* $(function(){
-        $('#students-name').bsMultiSelect();
-    });*/
-    /*$("#students-name").bsMultiSelect({
-        cssPatch: {
-            choices: { columnCount: '3' },
-        }
-    });*/
-
-
-
-    /*$(document).ready(function () {
-        $('#students-name').multiselect({
-            includeSelectAllOption: true,
-            enableFiltering: true
-        });
-    });*/
 }
 
 function clearCourseInputs() {
@@ -133,8 +115,7 @@ function clearCourseInputs() {
 }
 
 function loadCreatingNewCourseModal() {
-   addTeachersToList();
-    // addStudentsToList();
+    addTeachersToList();
 }
 
 function checkShamsi(inputDate) {
@@ -192,30 +173,50 @@ function checkDateValidation(startDate, finishDate) {
     return true;
 }
 
+function checkValidationForEmptyInputField() {
+    if (CheckEmptyInput.isEmptyInputField(courseTitle.value)) {
+        errMsg.textContent = "عنوان دوره را وارد کنید";
+        throw "Empty Course Title!"
+    }
+    if (CheckEmptyInput.isEmptyInputField(startDate.value)) {
+        errMsg.textContent = "تاریخ شروع دوره را وارد کنید";
+        throw "Empty Start Date!"
+    }
+    if (CheckEmptyInput.isEmptyInputField(finishDate.value)) {
+        errMsg.textContent = "تاریخ اتمام دوره را وارد کنید";
+        throw "Empty Finish Date!"
+    }
+    if (selectedTeacherId === "-1") {
+        errMsg.textContent = "استاد دوره را وارد کنید";
+        throw "Empty Teacher Field!"
+    }
+}
+
+
 /*----------------- Events Definition -----------------*/
 
 document.addEventListener("DOMContentLoaded", loadAllCourses());
 
 createCourseBtn.addEventListener("click", loadCreatingNewCourseModal());
 
+
 finalCreateCourseBtn.addEventListener("click", evt => {
     try {
         evt.preventDefault();
+        selectedTeacherId = $("#teachers-name option:selected").attr("id");
+        checkValidationForEmptyInputField();
         let startDateInEnglishNum = convertNumbersOfDate_PersianToEnglish(startDate.value, 'START_DATE');
         let finishDateInEnglishNum = convertNumbersOfDate_PersianToEnglish(finishDate.value, 'FINISH_DATE');
         checkDateValidation(startDateInEnglishNum, finishDateInEnglishNum);
-        /*let startDateGregorian = moment.from(startDateInEnglishNum, 'fa', 'YYYY/MM/DD').locale('en').format('MM-DD-YYYY');
-        let finishDateGregorian = moment.from(finishDateInEnglishNum, 'fa', 'YYYY/MM/DD').locale('en').format('MM-DD-YYYY');*/
-        let teacherId = $("#teachers-name option:selected").attr("id");
         let newCourse = {
             "courseTitle": courseTitle.value,
-            "courseTeacherId": teacherId,
+            "courseTeacherId": selectedTeacherId,
             "startDate": startDateInEnglishNum,
             "finishDate": finishDateInEnglishNum
         };
         console.log(newCourse);
         clearCourseInputs();
-        // fetchApi.post(url.concat("save-new-course"),newCourse);
+        fetchApi.post(url.concat("save-new-course"),newCourse);
         $("#create-course-modal").modal('hide');
         // location.reload();
     } catch (e) {
@@ -223,7 +224,7 @@ finalCreateCourseBtn.addEventListener("click", evt => {
     }
 });
 
-document.querySelector("#exit-create-course-modal").addEventListener("click",(e)=>{
+document.querySelector("#exit-create-course-modal").addEventListener("click", (e) => {
     e.preventDefault();
     clearCourseInputs();
     $("#create-course-modal").modal('hide');
