@@ -1,5 +1,6 @@
 package io.spring.quiz_online.service;
 
+import com.ibm.icu.text.SimpleDateFormat;
 import io.spring.quiz_online.dto.CourseDtoForSaving;
 import io.spring.quiz_online.dto.StudentDto;
 import io.spring.quiz_online.dto.TeacherDto;
@@ -12,6 +13,8 @@ import io.spring.quiz_online.repositories.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -23,11 +26,13 @@ public class CourseServiceImpl implements CourseService {
     private TeacherRepository teacherRepository;
     private CourseRepository courseRepository;
     private StudentRepository studentRepository;
+    private SimpleDateFormat persianDateFormat;
 
-    public CourseServiceImpl(TeacherRepository teacherRepository, CourseRepository courseRepository, StudentRepository studentRepository) {
+    public CourseServiceImpl(SimpleDateFormat persianDateFormat,TeacherRepository teacherRepository, CourseRepository courseRepository, StudentRepository studentRepository) {
         this.teacherRepository = teacherRepository;
         this.courseRepository = courseRepository;
         this.studentRepository = studentRepository;
+        this.persianDateFormat = persianDateFormat;
     }
 
     @Override
@@ -55,10 +60,14 @@ public class CourseServiceImpl implements CourseService {
 
     }
 
+
+    /* creating new course without assigning students to course*/
     @Override
     public void saveCourseDto(CourseDtoForSaving courseDtoForSaving) {
-        Optional<Teacher> teacherOptional = teacherRepository.findById(courseDtoForSaving.getTeacherId());
-//        Course course = new Course(courseDtoForSaving.getCourseTitle(),)
+        Optional<Teacher> optionalTeacher = teacherRepository.findById(courseDtoForSaving.getTeacherId());
+        Course course = new Course(courseDtoForSaving.getCourseTitle(),courseDtoForSaving.getStartDateJalali()
+        ,courseDtoForSaving.getFinishDateJalali(),null,optionalTeacher.get());
+        courseRepository.save(course);
     }
 
     @Override
@@ -70,4 +79,6 @@ public class CourseServiceImpl implements CourseService {
                 .map(mapStudentToStudentDtoFunction())
                 .collect(Collectors.toList());
     }
+
+
 }

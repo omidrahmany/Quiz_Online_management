@@ -85,8 +85,9 @@ public class MangerController {
         return courseService.findAll();
     }
 
-    @PutMapping("/save-new-course")
+    @PostMapping("/save-new-course")
     public void saveNewCourse(@RequestBody CourseDtoForSaving courseDtoForSaving){
+        courseService.saveCourseDto(courseDtoForSaving);
     }
 
 

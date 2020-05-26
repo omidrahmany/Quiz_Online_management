@@ -2,8 +2,8 @@ package io.spring.quiz_online.dto;
 
 public class CourseDtoForSaving {
     private String courseTitle;
-    private String startDate;
-    private String finishDate;
+    private String startDateJalali;
+    private String finishDateJalali;
     private Long teacherId;
 
     public String getCourseTitle() {
@@ -14,20 +14,20 @@ public class CourseDtoForSaving {
         this.courseTitle = courseTitle;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public String getStartDateJalali() {
+        return startDateJalali;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
+    public void setStartDateJalali(String startDateJalali) {
+        this.startDateJalali = startDateJalali;
     }
 
-    public String getFinishDate() {
-        return finishDate;
+    public String getFinishDateJalali() {
+        return finishDateJalali;
     }
 
-    public void setFinishDate(String finishDate) {
-        this.finishDate = finishDate;
+    public void setFinishDateJalali(String finishDateJalali) {
+        this.finishDateJalali = finishDateJalali;
     }
 
     public Long getTeacherId() {

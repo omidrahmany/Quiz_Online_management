@@ -7,7 +7,6 @@ let url = serverUrl().concat("/manager/");
 
 
 /* 1- Modal variables for creating new course */
-
 let courseTitle = document.querySelector("#course-title");
 let startDate = document.querySelector("#start-date");
 let finishDate = document.querySelector("#finish-date");
@@ -114,9 +113,6 @@ function clearCourseInputs() {
 
 }
 
-function loadCreatingNewCourseModal() {
-    addTeachersToList();
-}
 
 function checkShamsi(inputDate) {
     const patt = /(13|14)([0-9][0-9])\/(((0?[1-6])\/((0?[1-9])|([12][0-9])|(3[0-1])))|(((0?[7-9])|(1[0-2]))\/((0?[1-9])|([12][0-9])|(30))))/g;
@@ -197,7 +193,7 @@ function checkValidationForEmptyInputField() {
 
 document.addEventListener("DOMContentLoaded", loadAllCourses());
 
-createCourseBtn.addEventListener("click", loadCreatingNewCourseModal());
+createCourseBtn.addEventListener("click", addTeachersToList());
 
 
 finalCreateCourseBtn.addEventListener("click", evt => {
@@ -210,9 +206,9 @@ finalCreateCourseBtn.addEventListener("click", evt => {
         checkDateValidation(startDateInEnglishNum, finishDateInEnglishNum);
         let newCourse = {
             "courseTitle": courseTitle.value,
-            "courseTeacherId": selectedTeacherId,
-            "startDate": startDateInEnglishNum,
-            "finishDate": finishDateInEnglishNum
+            "teacherId": selectedTeacherId,
+            "startDateJalali": startDateInEnglishNum,
+            "finishDateJalali": finishDateInEnglishNum
         };
         console.log(newCourse);
         clearCourseInputs();
