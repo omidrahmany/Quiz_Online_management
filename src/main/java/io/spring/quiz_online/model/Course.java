@@ -2,6 +2,7 @@ package io.spring.quiz_online.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -12,8 +13,8 @@ public class Course {
     private Long courseId;
 
     private String courseTitle;
-    private LocalDate startDate;
-    private LocalDate finishDate;
+    private Date startDate;
+    private Date finishDate;
 
     @ManyToMany
     @JoinTable(name = "student_course",
@@ -25,7 +26,7 @@ public class Course {
     @JoinColumn(name = "teacherId")
     private Teacher teacher;
 
-    public Course(String courseTitle, LocalDate startDate, LocalDate finishDate, List<Student> students, Teacher teacher) {
+    public Course(String courseTitle, Date startDate, Date finishDate, List<Student> students, Teacher teacher) {
         this.courseTitle = courseTitle;
         this.startDate = startDate;
         this.finishDate = finishDate;
@@ -49,19 +50,20 @@ public class Course {
         this.courseTitle = courseTitle;
     }
 
-    public LocalDate getStartDate() {
+
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getFinishDate() {
+    public Date getFinishDate() {
         return finishDate;
     }
 
-    public void setFinishDate(LocalDate finishDate) {
+    public void setFinishDate(Date finishDate) {
         this.finishDate = finishDate;
     }
 

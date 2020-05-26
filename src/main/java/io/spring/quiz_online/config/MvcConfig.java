@@ -11,6 +11,7 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/registration").setViewName("registration/registration.html");
         registry.addViewController("/login").setViewName("login.html");
+        registry.addViewController("/test").setViewName("test-page.html");
 
         /*----------------------------------------- manager -----------------------------------------*/
         registry.addViewController("/manager-panel").setViewName("manager/manager-panel.html");

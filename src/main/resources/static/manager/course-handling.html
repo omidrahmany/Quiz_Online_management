@@ -8,7 +8,6 @@
           rel="stylesheet"/>
     <script src="/assets/PersianCalender/Scripts/jquery-2.1.4.js"></script>
     <script src="/assets/PersianCalender/Scripts/bootstrap.js"></script>
-    <link rel="stylesheet" href="/assets/multiple-select/dist/css/bootstrap-multiselect.css" type="text/css">
     <title> لیست دوره ها </title>
 </head>
 <body>
@@ -20,7 +19,8 @@
         <hr/>
         <a href="/logout"> خروج </a>
         <hr/>
-        <button type="button" class="btn btn-success" id="create-course" data-toggle="modal" data-target="#create-course-modal">
+        <button type="button" class="btn btn-success" id="create-course" data-toggle="modal"
+                data-target="#create-course-modal">
             ایجاد دوره
         </button>
         <hr/>
@@ -30,8 +30,9 @@
         <table class=" table table-bordered table-dark mx-auto text-center bg-primary mt-5 p-3"></table>
     </div>
 
-    <!--Modal-->
-    <div class="modal fade" id="create-course-modal" tabindex="-1" role="dialog" aria-labelledby="create-course-modal"
+    <!-- Creating New Course Modal-->
+    <div class="modal fade" id="create-course-modal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+         role="dialog" aria-labelledby="create-course-modal"
          aria-hidden="true">
         <div class="modal-dialog ">
             <div class="modal-content ">
@@ -39,56 +40,77 @@
                     <h3 class="modal-title text-center" id="exampleModalLabel">فرم ایجاد دوره</h3>
                 </div>
                 <div class="modal-body text-right">
+                    <div id="err-msg" style="background-color: #ff859b"></div>
                     <from>
                         <div>
-                            <label for="course-title">عنوان دوره</label>
-                            <input type="text" id="course-title" class="text-right col-sm-4">
+
+                            <div class="form-group">
+                                <label for="course-title">عنوان دوره</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="course-title">عنوان دوره</label>
+                                <div class="input-group col-lg-6">
+                                    <div class="input-group-addon">
+                                        <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
+                                    </div>
+                                    <input type="text" class="form-control text-right " id="course-title"
+                                           placeholder="... عنوان دوره را وارد کنید "/>
+                                </div>
+                            </div>
+
+
                             <hr/>
+                            <div class="form-group">
+                                <label for="start-date">تاریخ شروع دوره</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="start-date">تاریخ شروع</label>
+                                <div class="input-group col-lg-6">
+                                    <div class="input-group-addon" data-mddatetimepicker="true" data-trigger="click"
+                                         data-targetselector="#start-date">
+                                        <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                                    </div>
+                                    <input type="text" class="form-control  text-right" id="start-date"
+                                           placeholder="تاریخ شروع دوره" data-mddatetimepicker="true"
+                                           data-placement="right" data-englishnumber="false"/>
+                                </div>
+                            </div>
 
-                            <label for="start-date"> تاریخ شروع دوره </label>
-                            <input type="text" class="col-sm-4 text-right" id="start-date"
-                                   placeholder=" تاریخ شروع دوره"
-                                   data-mddatetimepicker="true" data-placement="left" data-englishnumber="false"/>
+
                             <hr/>
+                            <div class="form-group">
+                                <label for="finish-date">تاریخ اتمام دوره</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="finish-date">تاریخ اتمام</label>
+                                <div class="input-group col-lg-6">
+                                    <div class="input-group-addon" data-mddatetimepicker="true" data-trigger="click"
+                                         data-targetselector="#finish-date">
+                                        <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                                    </div>
+                                    <input type="text" class="form-control  text-right" id="finish-date"
+                                           placeholder="تاریخ اتمام دوره" data-mddatetimepicker="true"
+                                           data-placement="right" data-englishnumber="false"/>
+                                </div>
+                            </div>
 
-                            <label for="finish-date"> تاریخ اتمام دوره </label>
-                            <input type="text" class="col-sm-4 text-right" id="finish-date"
-                                   placeholder=" تاریخ اتمام دوره"
-                                   data-mddatetimepicker="true" data-placement="left" data-englishnumber="false"/>
+
                             <hr/>
-
-                            <label for="teacher">نام استاد</label>
-                            <input type="text" id="teacher"
-                                   class="text-right col-sm-4 custom-select custom-select-sm "
-                                   list="teachers-name"/>
-                            <datalist id="teachers-name">
-
-                            </datalist>
-                            <hr/>
-
-
-                                <label for="example-post">انتخاب دانشجویان دوره</label>
-                                <div >
-                                <select id="example-post" class="col-sm-4  " name="multiselect[]"
-                                        multiple="multiple">
-                                    <option value="1">المیرا رحمانی</option>
-                                    <option value="2">کوثر خلیلی</option>
-                                    <option value="3">اسرا نصیری</option>
-                                    <option value="4">کبری خرم روز</option>
-                                    <option value="5">مهسا عالیانی</option>
-                                    <option value="6">مهدی ظهرابی</option>
-                                    <option value="7">نوید محمدزاده</option>
-                                    <option value="8">جواد خشینان</option>
-                                    <option value="9">میثم زارع زاده</option>
-                                    <option value="10">یاسین ولی</option>
+                            <div class="form-group">
+                                <label for="teachers-name">استاد</label>
+                            </div>
+                            <div class="input-group col-lg-6">
+                                <select id="teachers-name" class="form-control text-right ">
                                 </select>
                             </div>
                         </div>
                     </from>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">انصراف</button>
-                    <button type="button" id="confirm-creating-course" class="btn btn-success" data-dismiss="modal">ایجاد</button>
+                    <button type="button" class="btn btn-danger" id="exit-create-course-modal" data-dismiss="modal">
+                        انصراف
+                    </button>
+                    <button type="button" id="confirm-creating-course" class="btn btn-success">ایجاد</button>
                 </div>
             </div>
         </div>
@@ -98,47 +120,49 @@
 </div>
 
 
+
+
+
+
+
+
+
+<!--<script src="/assets/bs-multiselect/dist/js/BsMultiSelect.js"></script>-->
+
+<!--<script>-->
+<!--    $(function(){-->
+<!--        $("#students-name").bsMultiSelect();-->
+<!--    });-->
+<!--</script>-->
+
+
+
+
+
+<!-- Multi Select Scripts for students -->
 <!--<script type="text/javascript">
     $(document).ready(function () {
-        var lastSelected = $('#teachers-list option:selected').val();
-        $('#teachers-list').multiselect({
-            onChange: function (element, checked) {
-                lastSelected = element.val();
-            }
-        });
-    });
-</script>-->
-
-
-<!-- Multi Select Scripts -->
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#example-post').multiselect({
+        $('#students-name').multiselect({
             includeSelectAllOption: true,
             enableFiltering: true
         });
     });
-</script>
+</script>-->
 
-<script type="text/javascript" src="/assets/multiple-select/dist/js/bootstrap-multiselect.js"></script>
+<!--<script type="text/javascript" src="/assets/multiple-select/dist/js/bootstrap-multiselect.js"></script>-->
 <!--------------------------------------------------------------------------------------------------------------------------------->
 
 
+
+
+
 <!-- Persian Calendar Scripts -->
-<script type="text/javascript">
-    $('#input1').change(function () {
-        var $this = $(this),
-            value = $this.val();
-    });
-</script>
 <script src="/assets/PersianCalender/Scripts/MdBootstrapPersianDateTimePicker/calendar.min.js"></script>
 <script src="/assets/PersianCalender/Scripts/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.js"></script>
 <!---------------------------------------------------------------------------------------------------------------------------------->
 
-
 <script src="/assets/js/fetch-service.js"></script>
 <script src="/assets/js/server-url.js"></script>
-<script src="/assets/js/account-dto.js"></script>
 <script src="/assets/js/course-handling.js"></script>
 </body>
 </html>

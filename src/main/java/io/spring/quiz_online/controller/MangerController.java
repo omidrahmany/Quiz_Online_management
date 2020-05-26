@@ -1,6 +1,8 @@
 package io.spring.quiz_online.controller;
 
 import io.spring.quiz_online.dto.AccountDto;
+import io.spring.quiz_online.dto.CourseDtoForSaving;
+import io.spring.quiz_online.dto.StudentDto;
 import io.spring.quiz_online.dto.TeacherDto;
 import io.spring.quiz_online.model.Course;
 import io.spring.quiz_online.model.ResultMsg;
@@ -32,6 +34,7 @@ public class MangerController {
         return accountService.findByUsername(username);
     }
 
+    /*------------------------------------ ACCOUNT ------------------------------------*/
 
     @GetMapping("/get-non-active-accounts")
     public List<AccountDto> getAccountsInactivated() {
@@ -62,17 +65,31 @@ public class MangerController {
     }
 
 
-
+    /*------------------------------------ TEACHERS ------------------------------------*/
     // return enabled teacher accounts to assign to courses.
     @GetMapping("/get-all-active-teachers")
     public List<TeacherDto> getAllTeachers(){
         return courseService.findAllTeachersByAccountEnabled();
     }
 
+    /*------------------------------------ STUDENTS ------------------------------------*/
+    // return enabled student accounts to assign to courses.
+    @GetMapping("/get-all-active-students")
+    public List<StudentDto> getAllStudents(){
+        return courseService.findAllStudentsByAccountEnabled();
+    }
+
+    /*------------------------------------ COURSE ------------------------------------*/
     @GetMapping("/get-all-courses")
     public List<Course> getAllCourses(){
         return courseService.findAll();
     }
+
+    @PutMapping("/save-new-course")
+    public void saveNewCourse(@RequestBody CourseDtoForSaving courseDtoForSaving){
+    }
+
+
 
 
 }
