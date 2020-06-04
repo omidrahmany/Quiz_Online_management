@@ -78,7 +78,7 @@ public class CourseServiceImpl implements CourseService {
 
     private Function<Student, StudentDto> mapStudentToStudentDtoFunction() {
         return student ->
-                new StudentDto(student.getPersonId(), student.getFirstName(), student.getLastName() , student.getAccount().getEmail());
+                new StudentDto(student.getPersonId(), student.getFirstName(), student.getLastName(), student.getAccount().getEmail());
     }
 
     @Override
@@ -92,18 +92,25 @@ public class CourseServiceImpl implements CourseService {
     }
 
 
-    /* creating new course without assigning students*/
+    /* creating new course */
     @Override
     public void saveCourseDto(CourseDtoForSaving courseDtoForSaving) {
         Optional<Teacher> optionalTeacher = teacherRepository.findById(courseDtoForSaving.getTeacherId());
+
+        List<Student> students = new ArrayList<>();
+        if (courseDtoForSaving.getSelectedStudentsEmail() != null)
+            for (String email : courseDtoForSaving.getSelectedStudentsEmail())
+                studentRepository.findByAccount_Email(email).ifPresent(students::add);
+
+        System.out.println(students.size());
         Course course = new Course(courseDtoForSaving.getCourseTitle(), courseDtoForSaving.getStartDateJalali()
-                , courseDtoForSaving.getFinishDateJalali(),null , optionalTeacher.get());
+                , courseDtoForSaving.getFinishDateJalali(), students, optionalTeacher.get());
         courseRepository.save(course);
     }
 
+
     @Override
     public List<StudentDto> findAllStudentsByAccountEnabled() {
-        List<Student> students = studentRepository.findAllByAccount_Enabled(true);
         return studentRepository
                 .findAllByAccount_Enabled(true)
                 .stream()

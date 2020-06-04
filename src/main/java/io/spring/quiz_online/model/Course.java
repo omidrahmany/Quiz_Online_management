@@ -18,12 +18,12 @@ public class Course {
     private String finishDate;
 
     /* fetch type should be FetchType.EAGER so don't change to FetchType.LAZY one.
-    * or else the LazyInitializationException is thrown */
+    * otherwise the LazyInitializationException is thrown */
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "course_student",
             joinColumns = @JoinColumn(name = "courseId"),
             inverseJoinColumns =@JoinColumn(name = "studentId"))
-    private Set<Student> students = new HashSet<>();
+    private List<Student> students;
 
     @ManyToOne
     @JoinColumn(name = "teacherId")
@@ -32,7 +32,7 @@ public class Course {
     public Course() {
     }
 
-    public Course(String courseTitle, String startDate, String finishDate, Set<Student> students, Teacher teacher) {
+    public Course(String courseTitle, String startDate, String finishDate, List<Student> students, Teacher teacher) {
         this.courseTitle = courseTitle;
         this.startDate = startDate;
         this.finishDate = finishDate;
@@ -73,11 +73,11 @@ public class Course {
         this.finishDate = finishDate;
     }
 
-    public Set<Student> getStudents() {
+    public List<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(Set<Student> students) {
+    public void setStudents(List<Student> students) {
         this.students = students;
     }
 
@@ -104,6 +104,6 @@ public class Course {
 
     @Override
     public int hashCode() {
-        return Objects.hash(courseId, courseTitle, startDate, finishDate, students, teacher);
+        return Objects.hash(courseId, courseTitle, startDate, finishDate, teacher);
     }
 }

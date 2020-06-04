@@ -9,10 +9,12 @@ let courseTitle = document.querySelector("#course-title");
 let startDate = document.querySelector("#start-date");
 let finishDate = document.querySelector("#finish-date");
 let createCourseBtn = document.querySelector("#create-course");
-let teachersOption = document.querySelector("#teachers-name");
+let teachersSelect = document.querySelector("#teachers-name");
 let finalCreateCourseBtn = document.querySelector("#confirm-creating-course");
 let teacherDataListOption = ''; // Initialization is necessary. don't change this otherwise the list of teachers won't create.
 let studentDataListOption = ''; // Initialization is necessary. don't change this otherwise the list of students won't create.
+let studentsSelect = document.createElement("select");
+let studentSelectDiv = document.querySelector("#select-div");
 let errMsg = document.querySelector("#err-msg");
 let selectedTeacherId = '';
 
@@ -37,7 +39,6 @@ function loadAllCourses() {
     fetchApi.get(url.concat("get-all-courses"))
         .then(data => {
             if (data.length !== 0) {
-                console.log(data);
                 document.querySelector("#nothing-msg").style.display = "none";
                 let i = 0;
                 tr = th;
@@ -88,7 +89,7 @@ function setCourseInfoToModal(id) {
 
 function loadStudentsAndTeachers() {
     addTeachersToList();
-    addStudentsToList()
+    addStudentsToList();
 }
 
 function addTeachersToList() {
@@ -98,31 +99,23 @@ function addTeachersToList() {
             teachers.forEach(teacher => {
                 teacherDataListOption += `<option id="${teacher.teacherId}"> ${teacher.firstName} ${teacher.lastName}</option>`;
             });
-            teachersOption.innerHTML = teacherDataListOption;
+            teachersSelect.innerHTML = teacherDataListOption;
         });
 }
 
 function addStudentsToList() {
     fetchApi.get(url.concat("get-all-active-students"))
         .then(students => {
-            console.log(students);
-
-            let selectDiv = document.querySelector("#select-div");
-            let select = document.createElement("select");
-            select.id = "student-list";
-            select.name = "multiselect[]";
-            select.className="form-control text-right";
-            select.setAttribute("multiple", "multiple");
-            select.required = true;
-
+            studentsSelect.id = "student-list";
+            studentsSelect.name = "multiselect[]";
+            studentsSelect.className = "form-control text-right";
+            studentsSelect.setAttribute("multiple", "multiple");
+            studentsSelect.required = true;
             students.forEach(student => {
-                studentDataListOption += `<option value="${student.email}" id="${student.studentId}"> ${student.firstName} ${student.lastName}</option>`;
+                studentDataListOption += `<option value="${student.email}" "> ${student.firstName} ${student.lastName} </option>`;
             });
-            select.innerHTML = studentDataListOption;
-            selectDiv.appendChild(select);
-            console.log("------------- students Info ---------------");
-            console.log(studentDataListOption);
-            console.log(select);
+            studentsSelect.innerHTML = studentDataListOption;
+            studentSelectDiv.appendChild(studentsSelect);
 
             $(document).ready(function () {
                 $('#student-list').multiselect({
@@ -154,9 +147,13 @@ function clearCourseInputs() {
     courseTitle.value = "";
     startDate.value = "";
     finishDate.value = "";
-    teachersOption.innerHTML = '';
+    teachersSelect.innerHTML = '';
     addTeachersToList();
 
+    /* Deselect selected students in select menu */
+    $('#student-list')
+        .multiselect("deselectAll", false)
+        .multiselect("refresh");
 }
 
 
@@ -253,12 +250,13 @@ function checkValidationForEmptyInputField() {
 
 document.addEventListener("DOMContentLoaded", loadAllCourses());
 
-createCourseBtn.addEventListener("click",loadStudentsAndTeachers());
+createCourseBtn.addEventListener("click", loadStudentsAndTeachers());
 
 finalCreateCourseBtn.addEventListener("click", evt => {
     try {
         evt.preventDefault();
         selectedTeacherId = $("#teachers-name option:selected").attr("id");
+        let selectedStudentsEmail = $('#student-list').val();
         checkValidationForEmptyInputField();
         let startDateInEnglishNum = convertNumbersOfDate_PersianToEnglish(startDate.value, 'START_DATE');
         let finishDateInEnglishNum = convertNumbersOfDate_PersianToEnglish(finishDate.value, 'FINISH_DATE');
@@ -267,13 +265,13 @@ finalCreateCourseBtn.addEventListener("click", evt => {
             "courseTitle": courseTitle.value,
             "teacherId": selectedTeacherId,
             "startDateJalali": startDateInEnglishNum,
-            "finishDateJalali": finishDateInEnglishNum
+            "finishDateJalali": finishDateInEnglishNum,
+            "selectedStudentsEmail": selectedStudentsEmail
         };
-        console.log(newCourse);
         clearCourseInputs();
         fetchApi.post(url.concat("save-new-course"), newCourse);
         $("#create-course-modal").modal('hide');
-        location.reload();
+        // location.reload();
     } catch (e) {
         console.log(e);
     }

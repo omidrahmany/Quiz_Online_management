@@ -12,25 +12,25 @@ import java.util.Set;
 public class Student extends Person {
 
     @ManyToMany(mappedBy = "students")
-    private Set<Course> courses = new HashSet<>();
+    private List<Course> courses;
 
     public Student() {
     }
 
-    public Student(Set<Course> courses) {
+    public Student(List<Course> courses) {
         this.courses = courses;
     }
 
-    public Student(String firstName, String lastName, Account account, Set<Course> courses) {
+    public Student(String firstName, String lastName, Account account, List<Course> courses) {
         super(firstName, lastName, account);
         this.courses = courses;
     }
 
-    public Set<Course> getCourses() {
+    public List<Course> getCourses() {
         return courses;
     }
 
-    public void setCourses(Set<Course> courses) {
+    public void setCourses(List<Course> courses) {
         this.courses = courses;
     }
 

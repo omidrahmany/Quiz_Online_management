@@ -1,10 +1,22 @@
 package io.spring.quiz_online.dto;
 
+import java.util.List;
+import java.util.Set;
+
 public class CourseDtoForSaving {
     private String courseTitle;
     private String startDateJalali;
     private String finishDateJalali;
     private Long teacherId;
+    private List<String> selectedStudentsEmail;
+
+    public List<String> getSelectedStudentsEmail() {
+        return selectedStudentsEmail;
+    }
+
+    public void setSelectedStudentsEmail(List<String> selectedStudentsEmail) {
+        this.selectedStudentsEmail = selectedStudentsEmail;
+    }
 
     public String getCourseTitle() {
         return courseTitle;
