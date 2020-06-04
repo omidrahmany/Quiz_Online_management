@@ -143,6 +143,4 @@ public class Account {
             return new Account(username, password, email, person, role, enabled);
         }
     }
-
-
 }

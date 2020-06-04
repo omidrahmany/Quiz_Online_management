@@ -14,11 +14,8 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private RoleEnum roleType;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "role")
     private Set<Account> accountSet;
-
-
-
 
 
     public Long getRoleId() {

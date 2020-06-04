@@ -250,7 +250,7 @@
              */
             buttonText: function(options, select) {
                 if (this.disabledText.length > 0
-                        && (select.prop('disabled') || (options.length === 0 && this.disableIfEmpty)))  {
+                        && (select.prop('disabled') || (options.length == 0 && this.disableIfEmpty)))  {
 
                     return this.disabledText;
                 }
@@ -263,14 +263,14 @@
                         && this.multiple) {
 
                     if (this.selectAllNumber) {
-                        return  this.allSelectedText ;
+                        return this.allSelectedText + ' (' + options.length + ')';
                     }
                     else {
                         return this.allSelectedText;
                     }
                 }
-                else if (this.numberDisplayed !== 0 && options.length > this.numberDisplayed) {
-                    return "انتخاب بیش از 3 گزینه";
+                else if (this.numberDisplayed != 0 && options.length > this.numberDisplayed) {
+                    return options.length + ' ' + this.nSelectedText;
                 }
                 else {
                     var selected = '';
@@ -412,7 +412,7 @@
             maxHeight: false,
             includeSelectAllOption: false,
             includeSelectAllIfMoreThan: 0,
-            selectAllText: ' انتخاب تمام گزینه ها ',
+            selectAllText: ' Select all',
             selectAllValue: 'multiselect-all',
             selectAllName: false,
             selectAllNumber: true,
@@ -423,14 +423,14 @@
             enableClickableOptGroups: false,
             enableCollapsibleOptGroups: false,
             collapseOptGroupsByDefault: false,
-            filterPlaceholder: 'جستجو',
+            filterPlaceholder: 'Search',
             // possible options: 'text', 'value', 'both'
             filterBehavior: 'text',
             includeFilterClearBtn: true,
             preventInputChangeEvent: false,
-            nonSelectedText: 'بدون انتخاب گزینه',
-            nSelectedText: 'مورد انتخاب شده',
-            allSelectedText: 'انتخاب تمام گزینه ها',
+            nonSelectedText: 'None selected',
+            nSelectedText: 'selected',
+            allSelectedText: 'All selected',
             numberDisplayed: 3,
             disableIfEmpty: false,
             disabledText: '',

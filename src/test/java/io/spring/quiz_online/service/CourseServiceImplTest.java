@@ -1,20 +1,43 @@
 package io.spring.quiz_online.service;
 
-import com.ibm.icu.text.SimpleDateFormat;
+import io.spring.quiz_online.dto.CourseDto;
+import io.spring.quiz_online.model.Course;
+import io.spring.quiz_online.repositories.CourseRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Date;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class CourseServiceImplTest {
 
     @Autowired
     CourseService courseService;
     @Autowired
-    SimpleDateFormat simpleDateFormat;
+    CourseRepository courseRepository;
+
+
+    @Test
+    void testFindAll() {
+        courseService.findAll().forEach(courseDto -> {
+            System.out.println(courseDto.getCourseTitle());
+            System.out.println(courseDto.getTeacherDto().getFirstName());
+            System.out.println(courseDto.getStudentDtoList().size());
+        });
+    }
+
+    @Test
+    void testFindAll1() {
+        System.out.println(courseRepository.findAll().size());
+    }
+
+    @Test
+    void mapCourseToCourseDtoFunction() {
+
+    }
 
  /*   @Test
     public void parseDate(){

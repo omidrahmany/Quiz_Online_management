@@ -4,11 +4,21 @@ public class StudentDto {
     private Long studentId;
     private String firstName;
     private String lastName;
+    private String email;
 
-    public StudentDto(Long studentId, String firstName, String lastName) {
+    public StudentDto(Long studentId, String firstName, String lastName, String email) {
         this.studentId = studentId;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email=email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getStudentId() {
@@ -34,4 +44,5 @@ public class StudentDto {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
 }

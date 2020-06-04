@@ -2,9 +2,7 @@
 let fetchApi = new FetchService();
 let url = serverUrl().concat("/manager/");
 
-
 /*-------- Modal Variables --------*/
-
 
 /* 1- Modal variables for creating new course */
 let courseTitle = document.querySelector("#course-title");
@@ -12,7 +10,6 @@ let startDate = document.querySelector("#start-date");
 let finishDate = document.querySelector("#finish-date");
 let createCourseBtn = document.querySelector("#create-course");
 let teachersOption = document.querySelector("#teachers-name");
-let studentsOption = document.querySelector("#students-name");
 let finalCreateCourseBtn = document.querySelector("#confirm-creating-course");
 let teacherDataListOption = ''; // Initialization is necessary. don't change this otherwise the list of teachers won't create.
 let studentDataListOption = ''; // Initialization is necessary. don't change this otherwise the list of students won't create.
@@ -40,6 +37,7 @@ function loadAllCourses() {
     fetchApi.get(url.concat("get-all-courses"))
         .then(data => {
             if (data.length !== 0) {
+                console.log(data);
                 document.querySelector("#nothing-msg").style.display = "none";
                 let i = 0;
                 tr = th;
@@ -48,21 +46,24 @@ function loadAllCourses() {
                     tr += `
                 <tr> 
                     <td >
-                    <button type='button' class="btn btn-danger"  onclick='deleteCourse(deleteUrl.concat(${course.courseId}))'>
+                    <button type='button' class="btn btn-danger"  onclick='deleteCourse(url.concat("delete-course/" , ${course.courseId}))'>
                     حذف
                     </button>
                      </td>
                     <td >              
                     <!-- Button trigger modal -->
-                    <button type="button" onclick='setCourseInfoToModal(${course.courseId})'  class="btn btn-success" data-toggle="modal" data-target="#showModal">
+                    <button type="button" onclick='setCourseInfoToModal(${course.courseId})'  class="btn btn-success" data-toggle="modal" data-target="#editing-course-modal">
                       ویرایش
                     </button>
                      </td>                       
-                    <td> <button type="button" onclick='setCourseInfoToModal(${course.courseId})'  class="btn btn-success" data-toggle="modal" data-target="#showModal">
+                    <td>
+                     <a href="/add-students"><button type="button" onclick='setCourseInfoToModal(${course.courseId})'  class="btn btn-success" data-toggle="modal" data-target="#adding-students-modal">
                     لیست دانشجویان
-                    </button></td>
-                    <td >تعداد</td>
-                    <td >${course.teacherName}</td>
+                    </button>
+                    </a>
+                    </td>
+                    <td >${course.numberOfStudentsAssigned}</td>
+                    <td >${course.teacher.firstName} ${course.teacher.lastName}</td>
                     <td >${course.finishDate}</td>
                     <td >${course.startDate}</td>
                     <td >${course.courseTitle}</td>
@@ -74,8 +75,20 @@ function loadAllCourses() {
         })
 }
 
-function clearErrMsg() {
-    errMsg.textContent = "";
+function deleteCourse(url) {
+    if (confirm("آیا از حذف این دوره مطمئن هستید؟")) {
+        fetchApi.delete(url);
+        location.reload()
+    }
+}
+
+function setCourseInfoToModal(id) {
+    sessionStorage.setItem("courseIdForAddingStudents", id);
+}
+
+function loadStudentsAndTeachers() {
+    addTeachersToList();
+    addStudentsToList()
 }
 
 function addTeachersToList() {
@@ -93,13 +106,46 @@ function addStudentsToList() {
     fetchApi.get(url.concat("get-all-active-students"))
         .then(students => {
             console.log(students);
+
+            let selectDiv = document.querySelector("#select-div");
+            let select = document.createElement("select");
+            select.id = "student-list";
+            select.name = "multiselect[]";
+            select.className="form-control text-right";
+            select.setAttribute("multiple", "multiple");
+            select.required = true;
+
             students.forEach(student => {
-                studentDataListOption += `<option value="${student.studentId}"> ${student.firstName} ${student.lastName}</option>`;
+                studentDataListOption += `<option value="${student.email}" id="${student.studentId}"> ${student.firstName} ${student.lastName}</option>`;
             });
-            studentsOption.innerHTML = studentDataListOption;
+            select.innerHTML = studentDataListOption;
+            selectDiv.appendChild(select);
             console.log("------------- students Info ---------------");
             console.log(studentDataListOption);
-            console.log(studentsOption);
+            console.log(select);
+
+            $(document).ready(function () {
+                $('#student-list').multiselect({
+                    includeSelectAllOption: true,
+                    enableFiltering: true,
+                    selectAllNumber: false,
+                    nonSelectedText: "-",
+                    enableCaseInsensitiveFiltering: true,
+                    buttonWidth: '400px',
+                    numberDisplayed: 100,
+                    optionLabel: function (element) {
+                        return $(element).html() + '(' + $(element).val() + ')';
+                    },
+                    includeResetOption: true,
+                    includeResetDivider: true,
+                    resetText: "حذف گزینه های انتخاب شده",
+                    allSelectedText: "انتخاب تمام گزینه ها",
+                    selectAllText: "انتخاب تمام گزینه ها",
+                    maxHeight: 500,
+                    dropUp: true
+                });
+            });
+
         });
 }
 
@@ -135,6 +181,20 @@ String.prototype.toEnglishDigit = function () {
     *  const find = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];*/
     const find = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
     const replace = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    let replaceString = this;
+    let regex;
+    for (let i = 0; i < find.length; i++) {
+        regex = new RegExp(find[i], "g");
+        replaceString = replaceString.replace(regex, replace[i]);
+    }
+    return replaceString;
+};
+
+String.prototype.toPersianDigit = function () {
+    /* numbers following are persian numbers
+    *  const replace = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];*/
+    const replace = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    const find = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     let replaceString = this;
     let regex;
     for (let i = 0; i < find.length; i++) {
@@ -193,8 +253,7 @@ function checkValidationForEmptyInputField() {
 
 document.addEventListener("DOMContentLoaded", loadAllCourses());
 
-createCourseBtn.addEventListener("click", addTeachersToList());
-
+createCourseBtn.addEventListener("click",loadStudentsAndTeachers());
 
 finalCreateCourseBtn.addEventListener("click", evt => {
     try {
@@ -212,14 +271,15 @@ finalCreateCourseBtn.addEventListener("click", evt => {
         };
         console.log(newCourse);
         clearCourseInputs();
-        fetchApi.post(url.concat("save-new-course"),newCourse);
+        fetchApi.post(url.concat("save-new-course"), newCourse);
         $("#create-course-modal").modal('hide');
-        // location.reload();
+        location.reload();
     } catch (e) {
         console.log(e);
     }
 });
 
+/* if you click exit btn (inside creating new course modal), this event would be fired.*/
 document.querySelector("#exit-create-course-modal").addEventListener("click", (e) => {
     e.preventDefault();
     clearCourseInputs();

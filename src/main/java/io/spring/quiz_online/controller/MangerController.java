@@ -1,9 +1,6 @@
 package io.spring.quiz_online.controller;
 
-import io.spring.quiz_online.dto.AccountDto;
-import io.spring.quiz_online.dto.CourseDtoForSaving;
-import io.spring.quiz_online.dto.StudentDto;
-import io.spring.quiz_online.dto.TeacherDto;
+import io.spring.quiz_online.dto.*;
 import io.spring.quiz_online.model.Course;
 import io.spring.quiz_online.model.ResultMsg;
 import io.spring.quiz_online.service.AccountService;
@@ -22,7 +19,7 @@ public class MangerController {
     private AccountService accountService;
     private CourseService courseService;
 
-    public MangerController(CourseService courseService,AuthenticationFacade authenticationFacade, AccountService accountService) {
+    public MangerController(CourseService courseService, AuthenticationFacade authenticationFacade, AccountService accountService) {
         this.authenticationFacade = authenticationFacade;
         this.accountService = accountService;
         this.courseService = courseService;
@@ -42,25 +39,25 @@ public class MangerController {
     }
 
     @DeleteMapping("/delete-account/{accountId}")
-    public void deleteAccount(@PathVariable Long accountId){
+    public void deleteAccount(@PathVariable Long accountId) {
         accountService.deleteAccount(accountId);
     }
 
     @GetMapping("/get-account/{accountId}")
-    public AccountDto getStudentById(@PathVariable Long accountId){
+    public AccountDto getStudentById(@PathVariable Long accountId) {
         return accountService.findById(accountId);
     }
 
     @PutMapping("/update-account")
-    public ResultMsg updateAccount(@RequestBody AccountDto accountDto){
+    public ResultMsg updateAccount(@RequestBody AccountDto accountDto) {
         accountService.updateAccount(accountDto);
-        return new ResultMsg( " اعمال تغییرات با موفقیت انجام شد. " , true);
+        return new ResultMsg(" اعمال تغییرات با موفقیت انجام شد. ", true);
     }
 
 
     // return all accounts but manager account. all teachers and students accounts (enabled and disabled accounts)
     @GetMapping("/get-all-accounts")
-    public List<AccountDto> getAllAccounts(){
+    public List<AccountDto> getAllAccounts() {
         return accountService.findAllTeachersAndStudentsRole();
     }
 
@@ -68,29 +65,30 @@ public class MangerController {
     /*------------------------------------ TEACHERS ------------------------------------*/
     // return enabled teacher accounts to assign to courses.
     @GetMapping("/get-all-active-teachers")
-    public List<TeacherDto> getAllTeachers(){
+    public List<TeacherDto> getAllTeachers() {
         return courseService.findAllTeachersByAccountEnabled();
     }
 
     /*------------------------------------ STUDENTS ------------------------------------*/
     // return enabled student accounts to assign to courses.
     @GetMapping("/get-all-active-students")
-    public List<StudentDto> getAllStudents(){
+    public List<StudentDto> getAllStudents() {
         return courseService.findAllStudentsByAccountEnabled();
     }
 
     /*------------------------------------ COURSE ------------------------------------*/
     @GetMapping("/get-all-courses")
-    public List<Course> getAllCourses(){
+    public List<CourseDto> getAllCourses() {
         return courseService.findAll();
     }
 
     @PostMapping("/save-new-course")
-    public void saveNewCourse(@RequestBody CourseDtoForSaving courseDtoForSaving){
+    public void saveNewCourse(@RequestBody CourseDtoForSaving courseDtoForSaving) {
         courseService.saveCourseDto(courseDtoForSaving);
     }
 
-
-
-
+    @DeleteMapping("/delete-course/{courseId}")
+    public void deleteCourse(@PathVariable Long courseId) {
+        courseService.deleteCourseById(courseId);
+    }
 }

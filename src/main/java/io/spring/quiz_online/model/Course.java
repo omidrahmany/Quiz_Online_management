@@ -1,7 +1,10 @@
 package io.spring.quiz_online.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Course {
@@ -14,17 +17,22 @@ public class Course {
     private String startDate;
     private String finishDate;
 
-    @ManyToMany
-    @JoinTable(name = "student_course",
+    /* fetch type should be FetchType.EAGER so don't change to FetchType.LAZY one.
+    * or else the LazyInitializationException is thrown */
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "course_student",
             joinColumns = @JoinColumn(name = "courseId"),
             inverseJoinColumns =@JoinColumn(name = "studentId"))
-    private List<Student> students;
+    private Set<Student> students = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "teacherId")
     private Teacher teacher;
 
-    public Course(String courseTitle, String startDate, String finishDate, List<Student> students, Teacher teacher) {
+    public Course() {
+    }
+
+    public Course(String courseTitle, String startDate, String finishDate, Set<Student> students, Teacher teacher) {
         this.courseTitle = courseTitle;
         this.startDate = startDate;
         this.finishDate = finishDate;
@@ -65,11 +73,11 @@ public class Course {
         this.finishDate = finishDate;
     }
 
-    public List<Student> getStudents() {
+    public Set<Student> getStudents() {
         return students;
     }
 
-    public void setStudents(List<Student> students) {
+    public void setStudents(Set<Student> students) {
         this.students = students;
     }
 
@@ -79,5 +87,23 @@ public class Course {
 
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return courseId.equals(course.courseId) &&
+                courseTitle.equals(course.courseTitle) &&
+                startDate.equals(course.startDate) &&
+                finishDate.equals(course.finishDate) &&
+                Objects.equals(students, course.students) &&
+                teacher.equals(course.teacher);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(courseId, courseTitle, startDate, finishDate, students, teacher);
     }
 }

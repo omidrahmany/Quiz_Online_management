@@ -77,7 +77,8 @@
             <version>67.1</version>
         </dependency>
 
-    </dependencies>
+
+            </dependencies>
 
     <build>
         <plugins>
