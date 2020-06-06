@@ -36,7 +36,14 @@ class CourseServiceImplTest {
 
     @Test
     void mapCourseToCourseDtoFunction() {
+    }
 
+    @Test
+    void findCourseById() {
+        CourseDto courseById = courseService.findCourseById(18L);
+        courseById.getStudentDtoList()
+                .forEach(studentDto -> System.out.println(studentDto.getFirstName()));
+        System.out.println(courseById.getTeacherDto().getFirstName());
     }
 
  /*   @Test

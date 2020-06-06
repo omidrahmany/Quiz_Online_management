@@ -20,16 +20,16 @@ let selectedTeacherId = '';
 
 /*-------- table Variables --------*/
 let table = document.querySelector("table");
-let th = `<tr >
-                <th > حذف </th> 
-                <th > ویرایش </th>
-                <th > افزودن دانشجو </th>  
-                <th > تعداد دانشجویان </th>  
-                 <th > نام استاد </th>
-                <th > تاریخ پایان دوره </th>
-                <th > تاریخ شروع دوره </th>
-                <th >عنوان دوره </th>
-                <th >ردیف</th>                                
+let th = `<tr class="text-center" >
+                <th class="text-center"> حذف </th> 
+                <th class="text-center"> ویرایش </th>
+                <th class="text-center"> لیست دانشجویان </th>  
+                <th class="text-center"> تعداد دانشجویان </th>  
+                 <th class="text-center"> نام استاد </th>
+                <th class="text-center"> تاریخ پایان دوره </th>
+                <th class="text-center"> تاریخ شروع دوره </th>
+                <th class="text-center">عنوان دوره </th>
+                <th class="text-center">ردیف</th>                                
             </tr>`;
 let tr;
 
@@ -44,31 +44,42 @@ function loadAllCourses() {
                 tr = th;
                 data.forEach(course => {
                     i++;
+                    let rowNum = i;
+                    rowNum = rowNum.toString().toPersianDigit();
+
+                    let startDate_inPersianDigit = convertNumbersOfDate_EnglishToPersian(course.startDate);
+                    let finishDate_inPersianDigit = convertNumbersOfDate_EnglishToPersian(course.finishDate);
+                    let studentsCount_inPersianDigit = course.numberOfStudentsAssigned.toString().toPersianDigit();
+
+
                     tr += `
                 <tr> 
                     <td >
-                    <button type='button' class="btn btn-danger"  onclick='deleteCourse(url.concat("delete-course/" , ${course.courseId}))'>
-                    حذف
-                    </button>
+                    <a style="color: #ff2b4b" class="cursor-pointer"  onclick='deleteCourse(url.concat("delete-course/" , ${course.courseId}))'>
+                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </a>
                      </td>
                     <td >              
                     <!-- Button trigger modal -->
-                    <button type="button" onclick='setCourseInfoToModal(${course.courseId})'  class="btn btn-success" data-toggle="modal" data-target="#editing-course-modal">
-                      ویرایش
-                    </button>
-                     </td>                       
+                    <a style="color: #378041" class="cursor-pointer" onclick='setCourseInfoToModal(${course.courseId})' data-toggle="modal" data-target="#create-course-modal">
+                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                    </a>
+                     </td>      
+                          
+                          
+                                      
                     <td>
-                     <a href="/add-students"><button type="button" onclick='setCourseInfoToModal(${course.courseId})'  class="btn btn-success" data-toggle="modal" data-target="#adding-students-modal">
-                    لیست دانشجویان
-                    </button>
+                     <a style="color: #378041" class="cursor-pointer" onclick='setCourseInfoToModal(${course.courseId})'>
+                     <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
                     </a>
                     </td>
-                    <td >${course.numberOfStudentsAssigned}</td>
+                    
+                    <td >${studentsCount_inPersianDigit}</td>
                     <td >${course.teacher.firstName} ${course.teacher.lastName}</td>
-                    <td >${course.finishDate}</td>
-                    <td >${course.startDate}</td>
+                    <td >${finishDate_inPersianDigit}</td>
+                    <td >${startDate_inPersianDigit}</td>
                     <td >${course.courseTitle}</td>
-                    <td >${i}</td>
+                    <td > ${rowNum}</td>
                 </tr>`;
                 });
                 table.innerHTML = tr;
@@ -84,7 +95,33 @@ function deleteCourse(url) {
 }
 
 function setCourseInfoToModal(id) {
-    sessionStorage.setItem("courseIdForAddingStudents", id);
+    sessionStorage.setItem("courseId", id);
+    fetchApi.get(url.concat("get-course/", id))
+        .then(data => {
+            console.log(data);
+            courseTitle.value = data.courseTitle;
+            startDate.value = convertNumbersOfDate_EnglishToPersian(data.startDate);
+            finishDate.value = convertNumbersOfDate_EnglishToPersian(data.finishDate);
+
+            /* set teacher to input*/
+            let optionsOfTeachers = teachersSelect.options;
+            for (i = 0; i < teachersSelect.options.length; i++) {
+                if (`${data.teacher.teacherId}` === optionsOfTeachers[i].id) teachersSelect.selectedIndex = i;
+            }
+
+            /* set student options to multi select */
+            let studentEmailsArray = [];
+            // fill students email array
+            for (j = 0; j < data.students.length; j++) {
+                studentEmailsArray.push(`${data.students[j].email}`);
+            }
+            // Set the student email array
+            $("#student-list").val(studentEmailsArray);
+
+            // Then refresh
+            $("#student-list").multiselect("refresh");
+
+        })
 }
 
 function loadStudentsAndTeachers() {
@@ -156,7 +193,6 @@ function clearCourseInputs() {
         .multiselect("refresh");
 }
 
-
 function checkShamsi(inputDate) {
     const patt = /(13|14)([0-9][0-9])\/(((0?[1-6])\/((0?[1-9])|([12][0-9])|(3[0-1])))|(((0?[7-9])|(1[0-2]))\/((0?[1-9])|([12][0-9])|(30))))/g;
     let result = patt.test(inputDate);
@@ -218,6 +254,14 @@ function convertNumbersOfDate_PersianToEnglish(persianNumDate, dateType) {
     } else return resultDate;
 }
 
+function convertNumbersOfDate_EnglishToPersian(englishNumDate) {
+    let stringsDateArray = englishNumDate.split("/");
+    let yyyy = stringsDateArray[0].toPersianDigit();
+    let mm = stringsDateArray[1].toPersianDigit();
+    let dd = stringsDateArray[2].toPersianDigit();
+    return yyyy + '/' + mm + '/' + dd;
+}
+
 function checkDateValidation(startDate, finishDate) {
     if (finishDate < startDate) {
         errMsg.textContent = "!تاریخ اتمام دوره نمی تواند قبل از تاریخ شروع دوره باشد";
@@ -261,17 +305,30 @@ finalCreateCourseBtn.addEventListener("click", evt => {
         let startDateInEnglishNum = convertNumbersOfDate_PersianToEnglish(startDate.value, 'START_DATE');
         let finishDateInEnglishNum = convertNumbersOfDate_PersianToEnglish(finishDate.value, 'FINISH_DATE');
         checkDateValidation(startDateInEnglishNum, finishDateInEnglishNum);
-        let newCourse = {
-            "courseTitle": courseTitle.value,
-            "teacherId": selectedTeacherId,
-            "startDateJalali": startDateInEnglishNum,
-            "finishDateJalali": finishDateInEnglishNum,
-            "selectedStudentsEmail": selectedStudentsEmail
-        };
+        let newCourse = "";
+        let courseIdForEditing = sessionStorage.getItem("courseId");
+        if (courseIdForEditing)
+            newCourse = {
+                "courseId": courseIdForEditing,
+                "courseTitle": courseTitle.value,
+                "teacherId": selectedTeacherId,
+                "startDateJalali": startDateInEnglishNum,
+                "finishDateJalali": finishDateInEnglishNum,
+                "selectedStudentsEmail": selectedStudentsEmail
+            };
+        else
+            newCourse = {
+                "courseTitle": courseTitle.value,
+                "teacherId": selectedTeacherId,
+                "startDateJalali": startDateInEnglishNum,
+                "finishDateJalali": finishDateInEnglishNum,
+                "selectedStudentsEmail": selectedStudentsEmail
+            };
         clearCourseInputs();
         fetchApi.post(url.concat("save-new-course"), newCourse);
         $("#create-course-modal").modal('hide');
-        // location.reload();
+        sessionStorage.removeItem("courseId");
+        location.reload();
     } catch (e) {
         console.log(e);
     }
@@ -284,3 +341,9 @@ document.querySelector("#exit-create-course-modal").addEventListener("click", (e
     $("#create-course-modal").modal('hide');
 });
 
+/* student - list
+<a href="/add-students">
+    <button type="button" onclick='setCourseInfoToModal(${course.courseId})'  class="btn btn-secondary" data-toggle="modal" data-target="#adding-students-modal">
+    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+    </button>
+    </a>*/

@@ -27,13 +27,11 @@ public class CourseServiceImpl implements CourseService {
     private TeacherRepository teacherRepository;
     private CourseRepository courseRepository;
     private StudentRepository studentRepository;
-    private SimpleDateFormat persianDateFormat;
 
-    public CourseServiceImpl(SimpleDateFormat persianDateFormat, TeacherRepository teacherRepository, CourseRepository courseRepository, StudentRepository studentRepository) {
+    public CourseServiceImpl(TeacherRepository teacherRepository, CourseRepository courseRepository, StudentRepository studentRepository) {
         this.teacherRepository = teacherRepository;
         this.courseRepository = courseRepository;
         this.studentRepository = studentRepository;
-        this.persianDateFormat = persianDateFormat;
     }
 
     @Override
@@ -101,10 +99,21 @@ public class CourseServiceImpl implements CourseService {
         if (courseDtoForSaving.getSelectedStudentsEmail() != null)
             for (String email : courseDtoForSaving.getSelectedStudentsEmail())
                 studentRepository.findByAccount_Email(email).ifPresent(students::add);
-
-        System.out.println(students.size());
-        Course course = new Course(courseDtoForSaving.getCourseTitle(), courseDtoForSaving.getStartDateJalali()
-                , courseDtoForSaving.getFinishDateJalali(), students, optionalTeacher.get());
+        Course course = null;
+        if (courseDtoForSaving.getCourseId() == null)
+            course = new Course(courseDtoForSaving.getCourseTitle(), courseDtoForSaving.getStartDateJalali()
+                    , courseDtoForSaving.getFinishDateJalali(), students, optionalTeacher.get());
+        else {
+            Optional<Course> courseOptional = courseRepository.findById(courseDtoForSaving.getCourseId());
+            if (courseOptional.isPresent()){
+                course = courseOptional.get();
+                course.setStudents(students);
+                course.setTeacher(optionalTeacher.get());
+                course.setCourseTitle(courseDtoForSaving.getCourseTitle());
+                course.setStartDate(courseDtoForSaving.getStartDateJalali());
+                course.setFinishDate(courseDtoForSaving.getFinishDateJalali());
+            }
+        }
         courseRepository.save(course);
     }
 
@@ -121,6 +130,14 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void deleteCourseById(Long courseId) {
         courseRepository.deleteById(courseId);
+    }
+
+    @Override
+    public CourseDto findCourseById(Long id) {
+        Optional<Course> courseOptional = courseRepository.findById(id);
+        if (courseOptional.isPresent())
+            return courseOptional.map(mapCourseToCourseDtoFunction()).get();
+        else return null;
     }
 
 

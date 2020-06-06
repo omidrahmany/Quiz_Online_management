@@ -19,6 +19,9 @@
     <script type="text/javascript" src="/assets/multiple-select/dist/js/bootstrap-multiselect.js"></script>
 
     <title> لیست دوره ها </title>
+    <style>
+        .cursor-pointer {cursor: pointer;}
+    </style>
 </head>
 <body>
 
@@ -37,12 +40,12 @@
             <div class="col-md-12 mx-auto text-right bg-primary rounded mt-5 p-3" id="nothing-msg">
                 . موردی یافت نشد
             </div>
-            <table class=" table table-bordered table-dark mx-auto text-center bg-primary mt-5 p-3"></table>
+            <table class=" table table-bordered table-dark mx-auto text-center bg-secondary mt-5 p-3"></table>
         </div>
     </div>
 </div>
 
-<!-- Creating New Course Modal-->
+<!-- Creating and Editing Course Modal-->
 <div class="modal fade" id="create-course-modal" data-backdrop="static" data-keyboard="false" tabindex="-1"
      role="dialog" aria-labelledby="create-course-modal"
      aria-hidden="true">
@@ -138,7 +141,7 @@
     </div>
 </div>
 
-<!-- Adding Students Modal -->
+<!-- Shoeing Students Modal -->
 <!--
     <div class="modal fade" id="adding-students-modal" tabindex="-1" role="dialog" aria-labelledby="adding-students-modal" aria-hidden="true">
         <div class="modal-dialog ">
@@ -162,47 +165,6 @@
         </div>
     </div>
 -->
-
-<!-- Editing Course Modal -->
-<div class="modal fade" id="editing-course-modal" tabindex="-1" role="dialog" aria-labelledby="editing-course-modal"
-     aria-hidden="true">
-    <div class="modal-dialog ">
-        <div class="modal-content ">
-            <div class="modal-header ">
-                <h5 class="modal-title text-center">ویرایش اطلاعات دوره</h5>
-
-            </div>
-            <div class="modal-body text-right">
-                <from>
-                    <div class="form-group">
-                        <label for="first-name">نام</label>
-                        <input type="text" id="first-name" class="form-control">
-                        <label for="last-name">نام خانوادگی</label>
-                        <input type="text" id="last-name" class="form-control">
-                        <label for="username">نام کاربری</label>
-                        <input type="text" id="username" class="form-control">
-                        <label for="role">نقش</label>
-                        <select id="role" name="role" class="form-control">
-                            <option>دانشجو</option>
-                            <option>استاد</option>
-                        </select>
-                        <label for="status">وضعیت</label>
-                        <select id="status" name="status" class="form-control">
-                            <option>فعال</option>
-                            <option>غیرفعال</option>
-                        </select>
-                        <label for="email">ایمیل</label>
-                        <input type="text" id="email" class="form-control">
-                    </div>
-                </from>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">انصراف</button>
-                <button type="button" id="save-change" class="btn btn-success">اعمال</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <!-- Persian Calendar Scripts -->

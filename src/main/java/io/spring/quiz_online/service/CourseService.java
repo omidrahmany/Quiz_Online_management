@@ -13,5 +13,6 @@ public interface CourseService {
     void saveCourseDto(CourseDtoForSaving courseDtoForSaving);
     List<StudentDto> findAllStudentsByAccountEnabled();
     void deleteCourseById(Long courseId);
+    CourseDto findCourseById(Long id);
 
 }

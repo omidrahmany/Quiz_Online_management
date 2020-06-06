@@ -82,6 +82,11 @@ public class MangerController {
         return courseService.findAll();
     }
 
+    @GetMapping("/get-course/{courseId}")
+    public CourseDto getCourse(@PathVariable Long courseId){
+        return courseService.findCourseById(courseId);
+    }
+
     @PostMapping("/save-new-course")
     public void saveNewCourse(@RequestBody CourseDtoForSaving courseDtoForSaving) {
         courseService.saveCourseDto(courseDtoForSaving);

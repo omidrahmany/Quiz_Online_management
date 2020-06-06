@@ -4,11 +4,20 @@ import java.util.List;
 import java.util.Set;
 
 public class CourseDtoForSaving {
+    private Long courseId;
     private String courseTitle;
     private String startDateJalali;
     private String finishDateJalali;
     private Long teacherId;
     private List<String> selectedStudentsEmail;
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
 
     public List<String> getSelectedStudentsEmail() {
         return selectedStudentsEmail;
