@@ -67,15 +67,15 @@ function updateTableInfo() {
                 tr += `
                 <tr> 
                     <td >
-                    <button type='button' class="btn btn-danger"  onclick='deleteAccount(deleteUrl.concat(${account.accountId}))'>
-                    حذف
-                    </button>
+                    <a  style="color: #ff2b4b" class="cursor-pointer" onclick='deleteAccount(deleteUrl.concat(${account.accountId}))'>
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </a>
                      </td>
                     <td >              
                     <!-- Button trigger modal -->
-                    <button type="button" onclick='setUserInfoToModal(${account.accountId})'  class="btn btn-success" data-toggle="modal" data-target="#showModal">
-                      ویرایش
-                    </button>
+                    <a  style="color: #378041" class="cursor-pointer" onclick='setUserInfoToModal(${account.accountId})'   data-toggle="modal" data-target="#showModal">
+                      <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                    </a>
                      </td>                       
                     <td >${status}</td>
                     <td >${account.email}</td>

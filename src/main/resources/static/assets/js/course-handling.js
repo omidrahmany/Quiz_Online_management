@@ -33,9 +33,12 @@ let th = `<tr class="text-center" >
             </tr>`;
 let tr;
 
-
 /*----------------- Function Definition -----------------*/
 function loadAllCourses() {
+
+    /* this item must be removed. otherwise it doesn't work.
+    *  if you do not, course would be updated instead of creating. */
+    sessionStorage.removeItem("courseId");
     fetchApi.get(url.concat("get-all-courses"))
         .then(data => {
             if (data.length !== 0) {
@@ -69,7 +72,7 @@ function loadAllCourses() {
                           
                                       
                     <td>
-                     <a style="color: #378041" class="cursor-pointer" onclick='setCourseInfoToModal(${course.courseId})'>
+                     <a style="color: #378041"  class="cursor-pointer" onclick='showStudentsOfCourse(${course.courseId})' data-toggle="modal" data-target="#show-students-modal" >
                      <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
                     </a>
                     </td>
@@ -79,12 +82,46 @@ function loadAllCourses() {
                     <td >${finishDate_inPersianDigit}</td>
                     <td >${startDate_inPersianDigit}</td>
                     <td >${course.courseTitle}</td>
-                    <td > ${rowNum}</td>
+                    <td >${rowNum}</td>
                 </tr>`;
                 });
                 table.innerHTML = tr;
             }
         })
+}
+
+function showStudentsOfCourse(courseId) {
+    fetchApi.get(url.concat("get-course/", courseId))
+        .then(data => {
+            document.querySelector("#course-title-showing-students").textContent = data.courseTitle;
+            if (data.students.length !== 0) {
+                let studentsTable = document.querySelector("#showing-students");
+                let studentsTableTh = `
+                <tr class="text-center" >
+                    <th class="text-center"> ایمیل </th>  
+                    <th class="text-center"> نام خانوادگی </th> 
+                    <th class="text-center"> نام </th>
+                    <th class="text-center"> ردیف </th>                                                              
+                </tr>`;
+                document.querySelector("#show-students-nothing-msg").style.display = "none";
+                let i = 0;
+                let studentsTableTr = studentsTableTh;
+                data.students.forEach(student =>{
+                    i++;
+                    let rowNum = i;
+                    rowNum = rowNum.toString().toPersianDigit();
+                    studentsTableTr += `
+                        <tr>
+                            <td>${student.email} </td>
+                            <td>${student.lastName} </td>
+                            <td>${student.firstName} </td>
+                            <td>${rowNum} </td>
+                        </tr>
+                    `;
+                });
+                studentsTable.innerHTML = studentsTableTr;
+            }
+        });
 }
 
 function deleteCourse(url) {
@@ -98,7 +135,6 @@ function setCourseInfoToModal(id) {
     sessionStorage.setItem("courseId", id);
     fetchApi.get(url.concat("get-course/", id))
         .then(data => {
-            console.log(data);
             courseTitle.value = data.courseTitle;
             startDate.value = convertNumbersOfDate_EnglishToPersian(data.startDate);
             finishDate.value = convertNumbersOfDate_EnglishToPersian(data.finishDate);
@@ -223,6 +259,7 @@ String.prototype.toEnglishDigit = function () {
     return replaceString;
 };
 
+/* convert english number to persian */
 String.prototype.toPersianDigit = function () {
     /* numbers following are persian numbers
     *  const replace = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];*/
@@ -289,7 +326,6 @@ function checkValidationForEmptyInputField() {
     }
 }
 
-
 /*----------------- Events Definition -----------------*/
 
 document.addEventListener("DOMContentLoaded", loadAllCourses());
@@ -325,7 +361,7 @@ finalCreateCourseBtn.addEventListener("click", evt => {
                 "selectedStudentsEmail": selectedStudentsEmail
             };
         clearCourseInputs();
-        fetchApi.post(url.concat("save-new-course"), newCourse);
+        fetchApi.post(url.concat("create-update-course"), newCourse);
         $("#create-course-modal").modal('hide');
         sessionStorage.removeItem("courseId");
         location.reload();
@@ -338,12 +374,13 @@ finalCreateCourseBtn.addEventListener("click", evt => {
 document.querySelector("#exit-create-course-modal").addEventListener("click", (e) => {
     e.preventDefault();
     clearCourseInputs();
+
+    /* this item must be removed in session storage. otherwise it doesn't work.
+    *  if you do not, course would be updated instead of created.
+    * (actually if you click edit btn and then click exit btn, course id would be saved in session storage.
+    * now if you click create course btn, it wouldn't be created new one. just update that course with saved id.) */
+    sessionStorage.removeItem("courseId");
     $("#create-course-modal").modal('hide');
 });
 
-/* student - list
-<a href="/add-students">
-    <button type="button" onclick='setCourseInfoToModal(${course.courseId})'  class="btn btn-secondary" data-toggle="modal" data-target="#adding-students-modal">
-    <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-    </button>
-    </a>*/
+

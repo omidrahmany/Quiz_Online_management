@@ -87,8 +87,8 @@ public class MangerController {
         return courseService.findCourseById(courseId);
     }
 
-    @PostMapping("/save-new-course")
-    public void saveNewCourse(@RequestBody CourseDtoForSaving courseDtoForSaving) {
+    @PostMapping("/create-update-course")
+    public void createAndUpdateCourse(@RequestBody CourseDtoForSaving courseDtoForSaving) {
         courseService.saveCourseDto(courseDtoForSaving);
     }
 

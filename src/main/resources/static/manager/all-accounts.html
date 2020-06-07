@@ -3,18 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/assets/css/non-active-students.css">
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link href="/assets/PersianCalender/Content/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/assets/PersianCalender/Content/Site.css" rel="stylesheet"/>
+    <link href="/assets/PersianCalender/Content/MdBootstrapPersianDateTimePicker/jquery.Bootstrap-PersianDateTimePicker.css"
+          rel="stylesheet"/>
+    <script src="/assets/PersianCalender/Scripts/jquery-2.1.4.js"></script>
+    <script src="/assets/PersianCalender/Scripts/bootstrap.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
+          integrity="sha256-ECB9bbROLGm8wOoEbHcHRxlHgzGqYpDtNTgDTyDz0wg=" crossorigin="anonymous"/>
 
     <title> لیست تمام کاربران </title>
+    <style>
+        .cursor-pointer {cursor: pointer;}
+    </style>
 </head>
 <body>
 <div class="container">
-    <div  class="col-md-12 mx-auto text-right bg-primary rounded mt-5 p-3">
-        <h1> لیست تمام کاربران </h1>
-        <div class="col-md-12 mx-auto text-right bg-primary rounded mt-5 p-3" id="nothing-msg">
-            . موردی یافت نشد
+    <div class="row">
+        <div class="form-group text-right">
+                <h3 class="text-right"> لیست تمام کاربران </h3>
+                           <div class="col-md-12 mx-auto text-right  rounded mt-5 p-3" id="nothing-msg">
+                    . موردی یافت نشد
+                </div>
+                <table class=" table table-bordered table-dark mx-auto text-center mt-5 p-3"></table>
         </div>
-        <table class=" table table-bordered table-dark mx-auto text-center bg-primary mt-5 p-3"></table>
     </div>
 
     <!-- Modal -->
@@ -22,7 +34,7 @@
         <div class="modal-dialog ">
             <div class="modal-content ">
                 <div class="modal-header ">
-                    <h5 class="modal-title text-center"  id="exampleModalLabel">ویرایش اطلاعات</h5>
+                    <h5 class="modal-title text-center" id="exampleModalLabel">ویرایش اطلاعات</h5>
                     <button type="button" class="close text-left" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -43,7 +55,7 @@
                             </select>
                             <label for="status">وضعیت</label>
                             <select id="status" name="status" class="form-control">
-                                <option >فعال</option>
+                                <option>فعال</option>
                                 <option>غیرفعال</option>
                             </select>
                             <label for="email">ایمیل</label>
@@ -52,23 +64,24 @@
                     </from>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">انصراف </button>
-                    <button type="button" id="save-change" class="btn btn-success"  >اعمال تغییرات</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">انصراف</button>
+                    <button type="button" id="save-change" class="btn btn-success">اعمال تغییرات</button>
                 </div>
             </div>
         </div>
     </div>
 
 
-
-
-
 </div>
 
 
 <script src="/assets/js/jquery-3.4.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
 
 <script src="/assets/js/fetch-service.js"></script>
 <script src="/assets/js/server-url.js"></script>

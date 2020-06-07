@@ -4,7 +4,7 @@ let msg = document.querySelector("#msg");
 
 fetchApi.get(url)
     .then(data => {
-        if (data.enable) msg.textContent = ` عزیز، خوش آمدی ${data.firstName} `;
+        if (data.enable) msg.textContent = ` نام: ${data.firstName} ${data.lastName} `;
     });
 
 

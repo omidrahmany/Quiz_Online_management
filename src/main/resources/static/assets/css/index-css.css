@@ -4,6 +4,12 @@
     box-sizing: border-box;
 }
 
+@font-face {
+    font-family: "KoofiDroid";
+    src: url( "/assets/PersianCalender/fonts/KoofiDroid.otf" );
+    src: url( "/assets/PersianCalender/fonts/KoofiDroid.ttf" );
+}
+
 /* ----------------------------- CONTAINER ----------------------------- */
 .container{
     width: 90%;
@@ -47,7 +53,7 @@ nav ul li a{
     text-decoration: none;
     color: white;
     font-size:18px;
-    font-family: 'Squada One',cursive;
+    font-family: 'KoofiDroid';
     font-size: 400;
     text-transform: uppercase;
 }
@@ -72,7 +78,7 @@ nav .socials{
 /* ----------------------------- HEADER ----------------------------- */
 
 header{
-    background: url(../imgs/bg.jpg);
+    background: url(../imgs/astronaut-1591556364523-1256.jpg);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -92,7 +98,7 @@ header .header-content{
 }
 
 header h1{
-    font-family: 'Anton' ;
+    font-family: 'KoofiDroid' ;
     font-size: 112px;
     line-height: 1;
     font-weight: 400;
@@ -103,8 +109,8 @@ header h1{
 
 header p{
     flex-basis: 100%;
-    font-family: 'Montserrat',sans-serif ;
-    font-size: 18px;
+    font-family: 'KoofiDroid' ;
+    font-size: 24px;
     font-weight: 400;
     color: white;
     padding-bottom: 50px;
@@ -117,7 +123,7 @@ header .link{
 }
 
 header .link a{
-    font-family: 'Montserrat',serif ;
+    font-family: 'KoofiDroid' ;
     font-size: 13px;
     font-weight: 400;
     line-height: 1.5;
@@ -165,7 +171,7 @@ section#subscribe .container{
 }
 
 section#subscribe p{
-    font-family: 'Montserrat',serif ;
+    font-family: 'KoofiDroid' ;
     font-size: 30px;
     font-weight: 600;
     line-height: 1.5;
@@ -179,7 +185,7 @@ section#subscribe a{
     border-radius: 5px;
     padding: 10px 10px;
     color: white;
-    font-family: 'Montserrat',serif ;
+    font-family: 'KoofiDroid' ;
     font-size: 20px;
     font-weight: 400;
     line-height: 1.5;
@@ -202,7 +208,7 @@ section#result .container{
     text-align: center;
 }
 section#result h1{
-    font-family: 'Montserrat',serif ;
+    font-family: 'KoofiDroid' ;
     font-size: 30px;
     font-weight: 700;
     line-height: 1.5;
@@ -222,7 +228,7 @@ section#result .imgs{
 }
 
 section#result p{
-    font-family: 'Montserrat',serif ;
+    font-family: 'KoofiDroid',serif ;
     font-size: 15px;
     font-weight: 400;
     line-height: 1;
@@ -231,7 +237,7 @@ section#result p{
 
 section#result a{
     display: inline-block;
-    font-family: 'Montserrat',serif ;
+    font-family: 'KoofiDroid' ;
     font-size: 15px;
     text-transform: uppercase;
     padding:10px 60px ;
